@@ -8,30 +8,31 @@ import time
 # Import the PCA9685 module.
 import Adafruit_PCA9685
 
-
 # Uncomment to enable debug output.
-#import logging
-#logging.basicConfig(level=logging.DEBUG)
+# import logging
+# logging.basicConfig(level=logging.DEBUG)
 
 # Initialise the PCA9685 using the default address (0x40).
 pwm = Adafruit_PCA9685.PCA9685()
 
 # Alternatively specify a different address and/or bus:
-#pwm = Adafruit_PCA9685.PCA9685(address=0x41, busnum=2)
+# pwm = Adafruit_PCA9685.PCA9685(address=0x41, busnum=2)
 
 # Configure min and max servo pulse lengths
-servo_min = 150  # Min pulse length out of 4096
-servo_max = 600  # Max pulse length out of 4096
+servo_min = 150
+servo_max = 600
+
 
 # Helper function to make setting a servo pulse width simpler.
 def set_servo_pulse(channel, pulse):
-    pulse_length = 1000000    # 1,000,000 us per second
-    pulse_length //= 60       # 60 Hz
+    # servo_minのとき
+    pulse_length = 1000000  # 1,000,000 μsec
+    pulse_length //= 60  # 60 Hz (一周期16666μ秒)
     print('{0}us per period'.format(pulse_length))
-    pulse_length //= 4096     # 12 bits of resolution
+    pulse_length //= 4096  # 4096段階のとき4？
     print('{0}us per bit'.format(pulse_length))
-    pulse *= 1000
-    pulse //= pulse_length
+    pulse *= 1000  # 150000
+    pulse //= pulse_length  # 37500
     pwm.set_pwm(channel, 0, pulse)
 
 # Set frequency to 60hz, good for servos.
