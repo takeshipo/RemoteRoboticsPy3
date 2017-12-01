@@ -1,20 +1,27 @@
 from pwm import support_servo_driver
-from sockrt import socket_communication
-import khr3hv
-
-
-# TODO: ソケット通信の際の例外処理が記述されていない！
+from sockrt import support_socket_com
+from khr3hv import *
+import socket
 
 if __name__ == '__main__':
 
-
-    host = "192.168.1.100"
+    host = socket.gethostname()  # ドメイン名を調べる
     port = 49152  # wellknownにぶつからない適当なポート番号
-    socket = socket_communication(host, port)
+    socket_com = support_socket_com(host, port)
 
     while True:
-        message = socket.get_date()
+        message = socket_com.get_date()
 
-        if message == 'KHR3HV':
-            get_date = socket.get_date()
-            khr3hv.KRS2552RHV_all(get_date)
+        if message == 'SERVO_TEST':
+            while True:
+                value = socket_com.get_date()
+                KRS2552RHV(value)
+                if value == 'QUIT':
+                    break
+
+        if message == 'COM_TEST':
+            while True:
+                value = socket_com.get_date()
+                print(value)
+                if value == 'QUIT':
+                    break

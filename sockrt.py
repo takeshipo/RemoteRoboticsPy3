@@ -1,7 +1,9 @@
 import socket
 
 
-class socket_communication(object):
+# TODO: 適切な例外処理がなされていない。
+
+class support_socket_com(object):
     # TODO : 現在、TCP/IPのみしか対応しないが、コンストラクタの引数protocolでTCPかUDP（それ以外）に対応するようにする
     def __init__(self, host, port, recv=1024, protocol='TCP/IP'):
         self.host = host
@@ -21,8 +23,18 @@ class socket_communication(object):
         self.server_socket.close()
 
     def get_date(self):
-        date = self.client_socket.recv(self.recv)
-        return date
+        try:
+            date = self.client_socket.recv(self.recv)
+            return date
+
+        except IOError:
+            self.client_socket()
+            print('エラー発生！通信を終了します。')
 
     def send_date(self, date):
-        self.client_socket.send(date)
+        try:
+            self.client_socket.send(date)
+
+        except IOError:
+            self.close_socket()
+            print('エラー発生！通信を終了します。')

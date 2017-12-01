@@ -19,7 +19,7 @@ range_angle = 270  # 全角度
 
 
 # 接続されているすべてのサーボに引数の角度を与える
-def KRS2552RHV_all(angle, tuple_ch=range(0, 15)):
+def KRS2552RHV(angle, tuple_ch=range(0, 15)):
     support = support_servo_driver(range_angle, pulse_period, servo_max, servo_min, False)
     pwm = support.get_instance()
 
