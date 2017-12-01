@@ -1,5 +1,4 @@
 from __future__ import division
-import time
 
 # Import the PCA9685 module.
 import Adafruit_PCA9685
@@ -15,7 +14,7 @@ class support_servo_driver(object):
         self.pulse_period = pulse_period  # 一周期分のパルス幅
         self.servo_max = servo_max  # サーボの最大角に対応するパルス幅
         self.servo_min = servo_min  # サーボの最小角に対応するパルス幅
-        self.isRivers = isRivers  # SG90のように逆回転するものはここをTrueにする
+        self.isRivers = isRivers  # SG90のように逆回転するものはこれをTrueにする
 
     def get_instance(self):
         pwm = Adafruit_PCA9685.PCA9685()  # ライブラリをインスタンス化
