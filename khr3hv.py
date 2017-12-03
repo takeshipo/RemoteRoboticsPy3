@@ -18,17 +18,15 @@ servo_min = 700
 range_angle = 270  # 全角度
 
 
-# 接続されているすべてのサーボに引数の角度を与える
-def KRS2552RHV(angle, tuple_ch=range(0, 15)):
-    support = support_servo_driver(range_angle, pulse_period, servo_max, servo_min, False)
-    pwm = support.get_instance()
+# サーボに引数の角度を与える。第二引数はタプルで何も指定しなければすべてのサーボに出力される
+def KRS2552RHV(angle, tuple_ch=range(0, 16)):
+    pwm_support = support_servo_driver(range_angle, pulse_period, servo_max, servo_min, False)
+    pwm = pwm_support.get_instance()
 
-    home_pulse = support.calcPulse(angle)
+    pulse_value = pwm_support.calcPulse(angle)
 
-    while True:
-        try:
-            # 接続されているサーボすべてを中心位置（ホーム）にする
-            for i in tuple_ch:
-                pwm.set_pwm(i, 0, home_pulse)
-        except KeyboardInterrupt:
-            pass
+    # 接続されているサーボすべてを中心位置（ホーム）にする
+    for i in tuple_ch:
+        print('チャンネル{0}に{1}\n'.format(i,pulse_value))
+        pwm.set_pwm(i, 0, pulse_value)
+

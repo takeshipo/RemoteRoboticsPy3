@@ -36,4 +36,5 @@ class support_servo_driver(object):
         # PCA9685（サーボドライバ）は12bit扱うことができるのでDuty比を乗算して対応した値にする。
         pulse_value = duty * 4096
 
-        return pulse_value
+        # 少数は切り捨て打て整数で返すs
+        return int(pulse_value)
