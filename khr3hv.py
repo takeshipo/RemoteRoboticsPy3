@@ -23,7 +23,7 @@ def KRS2552RHV(angle, tuple_ch=range(0, 16)):
     pwm_support = support_servo_driver(range_angle, pulse_period, servo_max, servo_min, False)
     pwm = pwm_support.get_instance()
 
-    pulse_value = pwm_support.calcPulse(angle)
+    pulse_value = pwm_support.calc_pulse(angle)
 
     # 接続されているサーボすべてを中心位置（ホーム）にする
     for i in tuple_ch:

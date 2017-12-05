@@ -10,12 +10,13 @@ class support_communication(metaclass=ABCMeta):
         raise NotImplementedError()
 
     @abstractmethod
-    def get_date(self):
+    def recv_date(self):
         raise NotImplementedError()
 
     @abstractmethod
-    def send_date(self,date):
+    def send_date(self, date):
         raise NotImplementedError()
+
 
 # TCP,UDPを扱うクラス
 # TODO: 適切な例外処理がなされていない。
@@ -40,7 +41,7 @@ class support_socket_com(support_communication):
         self.server_socket.close()
 
     # 受け取ったbyteコードをutf8にデコードして返す
-    def get_date(self):
+    def recv_date(self):
         try:
             date = self.client_socket.recv(self.recv_size)
             return bytes(date).decode('utf-8')

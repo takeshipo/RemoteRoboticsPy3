@@ -15,13 +15,13 @@ if __name__ == '__main__':
         while True:
 
             print('接続完了\nメニューを入力してください。')
-            message = socket_com.get_date()
+            message = socket_com.recv_date()
 
             print(message)
 
             if message == 'SERVO_TEST':
                 while True:
-                    angle = socket_com.get_date()
+                    angle = socket_com.recv_date()
                     print('degree:',int(angle))
                     KRS2552RHV(int(angle))
                     if angle == 'QUIT':

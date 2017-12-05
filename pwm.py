@@ -15,14 +15,15 @@ class support_servo_driver(object):
         self.servo_max = servo_max  # サーボの最大角に対応するパルス幅
         self.servo_min = servo_min  # サーボの最小角に対応するパルス幅
         self.isRivers = isRivers  # SG90のように逆回転するものはこれをTrueにする
+        self.pwm = None  # get_instanceで生成されるPCA9685インスタンスを用意
 
     def get_instance(self):
-        pwm = Adafruit_PCA9685.PCA9685()  # ライブラリをインスタンス化
-        pwm.set_pwm_freq(1000000 / self.pulse_period)  # デフォルトのままなら50HZ
-        return pwm
+        self.pwm = Adafruit_PCA9685.PCA9685()  # ライブラリ(PCA9685)をインスタンス化
+        self.pwm.set_pwm_freq(1000000 / self.pulse_period)  # デフォルトのままなら50HZ
+        return self.pwm
 
     # 角度を受け取ってPCA9685に対応した値を算出する
-    def calcPulse(self, angle):
+    def calc_pulse(self, angle):
         # パルス幅よりDuty比を求める。
         min_duty = self.servo_min / self.pulse_period
         max_duty = self.servo_max / self.pulse_period
