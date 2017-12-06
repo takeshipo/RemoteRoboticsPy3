@@ -1,37 +1,35 @@
-from pwm import support_servo_driver
-from com_server import support_socket_com
+from pwm import SupportServoDriver
+from com_server import SupportSocketCom
 from khr3hv import *
 import socket
 import time
 
 if __name__ == '__main__':
 
-    # host = socket.gethostname()  # ドメイン名を調べる
-    host = ''
-    port = 55555  # wellknownにぶつからない適当なポート番号
-    socket_com = support_socket_com(host, port)
+    host = ''  # ドメイン名、もしくはIPアドレス。socket.gethostname()を代入するとドメイン名を調べてくれる。
+    port = 55555  # wellknownにぶつからない適当なポート番号。クライアント側とサーバー側でポート番号を合わせる
+    socket_com = SupportSocketCom(host, port)
 
     try:
         while True:
 
-            print('接続完了\nメニューを入力してください。')
-            message = socket_com.recv_date()
+            print('接続完了\nメニュー名の入力を待ちます...')
+            menu = socket_com.recv_date()
+            print(menu)
 
-            print(message)
-
-            if message == 'SERVO_TEST':
+            if menu == 'SERVO_TEST':
                 while True:
-                    angle = socket_com.recv_date()
-                    print('degree:',int(angle))
-                    KRS2552RHV(int(angle))
-                    if angle == 'QUIT':
+                    value = socket_com.recv_date()
+                    if value == 'QUIT':
                         break
+                    print('degree:', int(value))
+                    KRS2552RHV(int(value))
 
-            time.sleep(1)
+
 
     except KeyboardInterrupt:
+        print("ソケット通信を終了します。")
         pass
 
     finally:
-        print('Log:finally')
         socket_com.close_socket()

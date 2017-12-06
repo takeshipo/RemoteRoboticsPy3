@@ -6,15 +6,21 @@ import Adafruit_PCA9685
 
 # TODO: isRiversがTrueだったときの処理が記述されていない
 # ライブラリの利用をサポートするクラス
-class support_servo_driver(object):
-    # デフォルト値は一般的に利用されやすい値が入っている。
-    # 引数に指定する時間の値はすべてマイクロ秒にしてください。
-    def __init__(self, range_angle=180, pulse_period=20000, servo_max=2000, servo_min=700, isRivers=False):
+class SupportServoDriver(object):
+
+    # 引数の時間の値はすべてマイクロ秒で指定する
+    # range_angle: サーボの最大角
+    # pulse_period: PWMの一周期。
+    # servo_max: サーボの最大角に対応するパルス幅
+    # servo_min: サーボの最小角に対応するパルス幅
+    # is_rivers: SG92Rのようにサーボの値が逆転するものはtrueに
+    # ---デフォルト値は一般的に利用されやすい値が入っている。---
+    def __init__(self, range_angle=180, pulse_period=20000, servo_max=2000, servo_min=700, is_rivers=False):
         self.range_angle = range_angle  # 回転することができる角度
         self.pulse_period = pulse_period  # 一周期分のパルス幅
         self.servo_max = servo_max  # サーボの最大角に対応するパルス幅
         self.servo_min = servo_min  # サーボの最小角に対応するパルス幅
-        self.isRivers = isRivers  # SG90のように逆回転するものはこれをTrueにする
+        self.isRivers = is_rivers  # SG90のように逆回転するものはこれをTrueにする
         # HACK:↓このインスタンス保持する必要ある？
         self.pwm = None  # get_instanceで生成されるPCA9685インスタンスを用意
 

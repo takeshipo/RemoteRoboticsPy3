@@ -2,7 +2,8 @@ import socket
 from abc import ABCMeta, abstractmethod
 
 
-# ソケット通信の基底クラス。Bluetoothもインヘリタンスして実装する。
+# ソケット通信の基底クラス。
+# TODO:Bluetoothもインヘリタンスして実装する。
 # そもそも、こんなJava(型付け言語)くさいこと必要？
 class support_communication(metaclass=ABCMeta):
     @abstractmethod
@@ -20,7 +21,7 @@ class support_communication(metaclass=ABCMeta):
 
 # TCP,UDPを扱うクラス
 # TODO: 適切な例外処理がなされていない。
-class support_socket_com(support_communication):
+class SupportSocketCom(support_communication):
     # TODO : 現在、TCP/IPのみしか対応しないが、コンストラクタの引数protocolでTCPかUDP（それ以外）に対応するようにする
     def __init__(self, host, port, recv_size=1024, protocol='TCP/IP'):
         self.host = host
