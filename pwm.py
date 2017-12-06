@@ -15,6 +15,7 @@ class support_servo_driver(object):
         self.servo_max = servo_max  # サーボの最大角に対応するパルス幅
         self.servo_min = servo_min  # サーボの最小角に対応するパルス幅
         self.isRivers = isRivers  # SG90のように逆回転するものはこれをTrueにする
+        # HACK:↓このインスタンス保持する必要ある？
         self.pwm = None  # get_instanceで生成されるPCA9685インスタンスを用意
 
     def get_instance(self):
