@@ -1,4 +1,31 @@
+# coding=utf-8
 from pwm import SupportServoDriver
+
+AnkleLeft = 14    # 左足首
+AnkleRight = 18   # 右足首
+ElbowLeft = 5     # 左肘
+ElbowRight = 9    # 右肘
+FootLeft = 15     # 左足先
+FootRight = 19    # 右足先
+HandLeft = 7      # 左手
+HandRight = 11    # 右手
+# HandTipLeft = 21  # Tip of the left hand
+# HandTipRight = 23 # Tip of the right hand
+Head = 3          # 頭
+HipLeft = 12  # 左ヒップ
+HipRight = 16  # 右ヒップ
+KneeLeft = 13  # 左ひざ
+KneeRight = 17  # 右ひざ
+Neck = 2  # 首
+ShoulderLeft = 4  # 左肩
+ShoulderRight = 8  # 右肩
+SpineBase = 0  # 背骨
+SpineMid = 1  # 腰
+# SpineShoulder = 20  # Spine at the shoulder
+# ThumbLeft = 22  # 左親指
+# ThumbRight = 24  # 右親指
+WristLeft = 6  # 左手首
+WristRight = 10  # 右手首
 
 # KHR-3HVを動作させるためのモーションなどをこのファイル作成して行く。
 # クラスにするか、このまま通常の関数にするかは、まだ未定

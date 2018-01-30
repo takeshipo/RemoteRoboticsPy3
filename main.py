@@ -19,12 +19,15 @@ if __name__ == '__main__':
 
             if menu == 'SERVO_TEST':
                 while True:
-                    value = socket_com.recv_date()
-                    if value == 'QUIT':
+                    data = socket_com.recv_date()
+                    if data == 'QUIT':
                         break
-                    print('degree:', int(value))
-                    KRS2552RHV(int(value))
-
+                    data = data.split(':')
+                    channel = data[0].split(',')
+                    angle = data[1]
+                    print('channel : ', channel)
+                    print('angle : ', int(angle))
+                    KRS2552RHV(int(angle),channel)
 
 
     except KeyboardInterrupt:
