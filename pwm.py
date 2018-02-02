@@ -1,3 +1,4 @@
+# coding=utf-8
 from __future__ import division
 
 # Import the PCA9685 module.
@@ -7,7 +8,6 @@ import Adafruit_PCA9685
 # TODO: isRiversがTrueだったときの処理が記述されていない
 # ライブラリの利用をサポートするクラス
 class SupportServoDriver(object):
-
     # 引数の時間の値はすべてマイクロ秒で指定する
     # range_angle: サーボの最大角
     # pulse_period: PWMの一周期。
@@ -17,7 +17,7 @@ class SupportServoDriver(object):
     # ---デフォルト値は一般的に利用されやすい値が入っている。---
     def __init__(self, range_angle=180, pulse_period=20000, servo_max=2000, servo_min=700, is_rivers=False):
         self.range_angle = range_angle  # 回転することができる角度
-        self.pulse_period = pulse_period  # 一周期分のパルス幅
+        self.pulse_period = pulse_period  # 一周期分のパルス幅。
         self.servo_max = servo_max  # サーボの最大角に対応するパルス幅
         self.servo_min = servo_min  # サーボの最小角に対応するパルス幅
         self.isRivers = is_rivers  # SG90のように逆回転するものはこれをTrueにする
@@ -36,7 +36,9 @@ class SupportServoDriver(object):
         max_duty = self.servo_max / self.pulse_period
 
         # 全体に対して何％の角度か。例えば、フルが180°に対しての60°であれば33%。
-        par_angle = (angle / self.range_angle)
+        # par_angle = (angle / self.range_angle)  # 中心を90°として角度を指定する場合
+        par_angle = ((angle + self.range_angle / 2) / self.range_angle)  # 中心を0°として角度を指定する場合
+        # print(angle + self.range_angle / 2)
 
         # 角度からDuty比を求める
         duty = ((max_duty - min_duty) * par_angle) + min_duty

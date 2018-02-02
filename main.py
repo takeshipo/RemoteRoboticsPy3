@@ -23,12 +23,11 @@ if __name__ == '__main__':
                     if data == 'QUIT':
                         break
                     data = data.split(':')
-                    channel = data[0].split(',')
+                    channel = data[0]  # .split(',')
                     angle = data[1]
                     print('channel : ', channel)
                     print('angle : ', int(angle))
-                    KRS2552RHV(int(angle),channel)
-
+                    RS306MD(int(angle))
 
     except KeyboardInterrupt:
         print("ソケット通信を終了します。")

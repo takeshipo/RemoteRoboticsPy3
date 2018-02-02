@@ -4,7 +4,7 @@ import socket
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 print('接続を開始します。')
-client.connect(('192.168.1.100', 55555))
+client.connect(('192.168.1.15', 55555))
 
 print('メニュー')
 date = input()
