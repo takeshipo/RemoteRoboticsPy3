@@ -1,14 +1,18 @@
 from pwm import SupportServoDriver
 from com_server import SupportSocketCom
-from khr3hv import *
+from servo import *
 import socket
 import time
+import serial
 
 if __name__ == '__main__':
 
     host = ''  # ドメイン名、もしくはIPアドレス。socket.gethostname()を代入するとドメイン名を調べてくれる。
     port = 55555  # wellknownにぶつからない適当なポート番号。クライアント側とサーバー側でポート番号を合わせる
     socket_com = SupportSocketCom(host, port)
+
+    # Arduinoとのシリアル通信を準備
+    Arduino = serial.Serial('/dev/ttyAMA0', 9600)
 
     try:
         while True:
@@ -23,11 +27,12 @@ if __name__ == '__main__':
                     if data == 'QUIT':
                         break
                     data = data.split(':')
-                    channel = data[0]  # .split(',')
-                    angle = data[1]
+                    channel = int(data[0])  # .split(',')
+                    angle = int(data[1])
                     print('channel : ', channel)
-                    print('angle : ', int(angle))
-                    RS306MD(int(angle))
+                    print('angle : ', angle)
+                    # RS306MD(int(angle))
+                    KRS2552RHV_ICS(Arduino, channel, angle)
 
     except KeyboardInterrupt:
         print("ソケット通信を終了します。")

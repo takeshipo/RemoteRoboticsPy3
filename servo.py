@@ -46,7 +46,7 @@ range_angle = 270  # 全角度
 
 
 # サーボに引数の角度を与える。第二引数はタプルで何も指定しなければすべてのサーボに出力される
-def KRS2552RHV(angle, tuple_ch=range(0, 16)):
+def KRS2552RHV_PWM(angle, tuple_ch=range(0, 16)):
     pwm_support = SupportServoDriver(range_angle, pulse_period, servo_max, servo_min, False)
     pwm = pwm_support.get_instance()
 
@@ -56,6 +56,20 @@ def KRS2552RHV(angle, tuple_ch=range(0, 16)):
     for i in tuple_ch:
         print('チャンネル{0}に{1}\n'.format(i, pulse_value))
         pwm.set_pwm(i, 0, pulse_value)
+
+
+def KRS2552RHV_ICS(serial, id, rotate):
+    value = int((rotate / 270) * (9500 - 5500) + 5500)
+    low = value & 0xff
+    high = value >> 8
+    high = high & 0xff
+
+    serial.write(b'C')
+    serial.write(id)
+    serial.write(b'V')
+    serial.write(low)
+    serial.write(high)
+
 
 # FIXME: 0°に出力してもうまく出来ない。数値や計算は問題ない。+10°くらいで実際の0°になる。
 def RS306MD(angle, tuple_ch=range(0, 16)):
