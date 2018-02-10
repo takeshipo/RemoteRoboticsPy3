@@ -16,11 +16,11 @@ class SupportServoDriver(object):
     # is_rivers: SG92Rのようにサーボの値が逆転するものはtrueに
     # ---デフォルト値は一般的に利用されやすい値が入っている。---
     def __init__(self, range_angle=180, pulse_period=20000, servo_max=2000, servo_min=700, is_rivers=False):
-        self.range_angle = range_angle  # 回転することができる角度
-        self.pulse_period = pulse_period  # 一周期分のパルス幅。
-        self.servo_max = servo_max  # サーボの最大角に対応するパルス幅
-        self.servo_min = servo_min  # サーボの最小角に対応するパルス幅
-        self.isRivers = is_rivers  # SG90のように逆回転するものはこれをTrueにする
+        self.range_angle = range_angle
+        self.pulse_period = pulse_period
+        self.servo_max = servo_max
+        self.servo_min = servo_min
+        self.isRivers = is_rivers
         # HACK:↓このインスタンス保持する必要ある？
         self.pwm = None  # get_instanceで生成されるPCA9685インスタンスを用意
 

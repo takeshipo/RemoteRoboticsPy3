@@ -58,7 +58,7 @@ def KRS2552RHV_PWM(angle, tuple_ch=range(0, 16)):
         pwm.set_pwm(i, 0, pulse_value)
 
 
-def KRS2552RHV_ICS(serial, id, rotate):
+def KRS2552RHV_Arduino(serial, id, rotate):
     value = int((rotate / 270) * (9500 - 5500) + 5500)
     low = value & 0xff
     high = value >> 8

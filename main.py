@@ -32,7 +32,7 @@ if __name__ == '__main__':
                     print('channel : ', channel)
                     print('angle : ', angle)
                     # RS306MD(int(angle))
-                    KRS2552RHV_ICS(Arduino, channel, angle)
+                    KRS2552RHV_Arduino(Arduino, channel, angle)
 
     except KeyboardInterrupt:
         print("ソケット通信を終了します。")
