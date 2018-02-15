@@ -9,7 +9,7 @@ import Adafruit_PCA9685
 # ライブラリの利用をサポートするクラス
 class SupportServoDriver(object):
 
-    def __init__(self, range_angle=180, pulse_period=20000, servo_max=2000, servo_min=700, is_rivers=False):
+    def __init__(self, range_angle=180, pulse_period=20000, servo_max=2000, servo_min=700):
 
         # ---デフォルト値は一般的に利用されやすい値が入っている。---
         # 引数の時間の値はすべてマイクロ秒で指定する
@@ -23,7 +23,6 @@ class SupportServoDriver(object):
         self.pulse_period = pulse_period
         self.servo_max = servo_max
         self.servo_min = servo_min
-        self.isRivers = is_rivers
         # HACK:↓このインスタンス保持する必要ある？
         self.pwm = None  # get_instanceで生成されるPCA9685インスタンスを用意
 
