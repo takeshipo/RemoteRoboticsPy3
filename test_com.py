@@ -1,8 +1,8 @@
-# クライアント側で利用するテスト用ソースです。
+# サーバー側で利用するテスト用ソースです。
 
-from com_socket import SupportSocketClient
+from com_socket import *
 
-server = SupportSocketClient('192.168.43.120', 55555)
+server = SupportSocketServer('', 55555)
 
 try:
     while True:
