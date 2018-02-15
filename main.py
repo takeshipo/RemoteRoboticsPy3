@@ -100,7 +100,7 @@ def i2c_krs2552rhv(socket_com):
 
 
 if __name__ == '__main__':
-    host = '192.168.43.120'  # ドメイン名、もしくはIPアドレス。socket.gethostname()を代入するとドメイン名を調べてくれる。
+    host = '192.168.43.75'  # ドメイン名、もしくはIPアドレス。socket.gethostname()を代入するとドメイン名を調べてくれる。
     port = 55555  # wellknownにぶつからない適当なポート番号。クライアント側とサーバー側でポート番号を合わせる
     socket_com = SupportSocketClient(host, port)
 
