@@ -133,8 +133,8 @@ def i2c_krs2552rhv(socket_com):
 
 if __name__ == '__main__':
 
-    menu = input('メニューを入力してください')
-    print('test_servo\nmove_servo')
+    menu = input('メニューを入力してください\ntest_servo\nmove_servo\n')
+
 
     if menu == 'move_servo':
         host = '192.168.43.181'  # ドメイン名、もしくはIPアドレス。socket.gethostname()を代入するとドメイン名を調べてくれる。
@@ -144,6 +144,8 @@ if __name__ == '__main__':
         move_servo(socket_com)
 
     elif menu == 'test_servo':
+        print('ID:角度で入力してください\n')
+        print('IDにallを入力することでサーボドライバに接続されているすべてのサーボに出力')
         test_servo()
 
     # print('接続完了\nメニュー名の入力を待ちます...')
