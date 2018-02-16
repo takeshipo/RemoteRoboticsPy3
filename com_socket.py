@@ -66,8 +66,8 @@ class SupportSocketClient:
     # 受け取ったbyteコードをutf8にデコードして返す
     def recv_str(self):
         try:
-            date = self.server_socket.recv(self.recv_size)
-            return bytes(date).decode('utf-8')
+            data = self.server_socket.recv(self.recv_size)
+            return bytes(data).decode('utf-8')
 
         except IOError:
             print('受信でエラー発生！通信を終了します。')

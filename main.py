@@ -1,6 +1,6 @@
 # coding=utf-8
 from pwm import SupportServoDriver
-from com_socket import SupportSocketClient
+from com_socket import *
 from servo import *
 import serial
 import smbus2
@@ -30,21 +30,53 @@ def serial_send(socket_com):
         socket_com.close()
 
 
-def servo_test(socket_com):
+def move_servo(socket_com):
     try:
+        pwm_support = SupportServoDriver(288, 20000, 2480, 560)
+        pwm = pwm_support.get_instance()
+
         while True:
             data = socket_com.recv_str()
+
+            if data == b'':
+                break
 
             data = data.split(':')
             channel = int(data[0])
             angle = int(data[1])
+
             print('[Receive]')
             print('channel : {0}'.format(channel))
             print('angle : {0}\n'.format(angle))
 
-            # RS306MD(int(angle))　# ここで呼び出すサーボモータを変える
+            pulse_value = pwm_support.calc_pulse(angle)
+            pwm.set_pwm(channel, 0, pulse_value)
+
     finally:
         socket_com.close()
+
+
+def test_servo():
+    while True:
+        data = input()
+        data = data.split(':')
+
+        channel = data[0]
+        angle = data[1]
+
+        if channel == 'all':
+            print('[Receive]')
+            print('channel : all')
+            print('angle : {0}\n'.format(angle))
+            RS306MD(int(angle))
+
+        else:
+            print('[Receive]')
+            print('channel : {0}'.format(channel))
+            print('angle : {0}\n'.format(angle))
+
+            RS306MD(int(channel), int(angle))
+
 
 def i2c_test():
     try:
@@ -100,13 +132,19 @@ def i2c_krs2552rhv(socket_com):
 
 
 if __name__ == '__main__':
-    host = '192.168.43.75'  # ドメイン名、もしくはIPアドレス。socket.gethostname()を代入するとドメイン名を調べてくれる。
-    port = 55555  # wellknownにぶつからない適当なポート番号。クライアント側とサーバー側でポート番号を合わせる
-    socket_com = SupportSocketClient(host, port)
 
-    # Arduino = serial.Serial('/dev/ttyUSB0', 9600)
+    menu = input('メニューを入力してください')
+    print('test_servo\nmove_servo')
 
-    servo_test(socket_com)
+    if menu == 'move_servo':
+        host = '192.168.43.181'  # ドメイン名、もしくはIPアドレス。socket.gethostname()を代入するとドメイン名を調べてくれる。
+        port = 55555  # wellknownにぶつからない適当なポート番号。クライアント側とサーバー側でポート番号を合わせる
+        # Arduino = serial.Serial('/dev/ttyUSB0', 9600)
+        socket_com = SupportSocketClient(host, port)
+        move_servo(socket_com)
+
+    elif menu == 'test_servo':
+        test_servo()
 
     # print('接続完了\nメニュー名の入力を待ちます...')
     # # menu = socket_com.recv_date()
@@ -124,4 +162,3 @@ if __name__ == '__main__':
     #
     # elif menu == 'SERIAL_TEST':
     #     serial_send(socket_com)
-
