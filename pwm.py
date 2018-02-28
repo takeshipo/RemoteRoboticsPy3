@@ -10,7 +10,6 @@ import Adafruit_PCA9685
 class SupportServoDriver(object):
 
     def __init__(self, range_angle=180, pulse_period=20000, servo_max=2000, servo_min=700):
-
         # ---デフォルト値は一般的に利用されやすい値が入っている。---
         # 引数の時間の値はすべてマイクロ秒で指定する
         # range_angle: サーボの最大角
@@ -26,8 +25,8 @@ class SupportServoDriver(object):
         # HACK:↓このインスタンス保持する必要ある？
         self.pwm = None  # get_instanceで生成されるPCA9685インスタンスを用意
 
-    def get_instance(self):
-        self.pwm = Adafruit_PCA9685.PCA9685()  # ライブラリ(PCA9685)をインスタンス化
+    def get_instance(self, address=0x40):
+        self.pwm = Adafruit_PCA9685.PCA9685(address)  # ライブラリ(PCA9685)をインスタンス化
         self.pwm.set_pwm_freq(1000000 / self.pulse_period)  # デフォルトのままなら50HZ
         return self.pwm
 
