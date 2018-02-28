@@ -1,5 +1,6 @@
 # coding=utf-8
 from pwm import SupportServoDriver
+import threading
 
 # AnkleLeft = 14  # 左足首
 # AnkleRight = 18  # 右足首
@@ -79,14 +80,118 @@ def KRS2552RHV_Arduino(serial, id, rotate):
     # print(value == ((recv_high << 8) | recv_low))
 
 
-# FIXME: 0°に出力してもうまく出来ない。数値や計算は問題ない。+10°くらいで実際の0°になる。
+# FIXME: 0°に出力してもうまく出来ない。数値や計算は問題ない。+12°くらいで実際の0°になる。
 def RS306MD(angle, tuple_ch=range(0, 16)):
     pwm_support = SupportServoDriver(288, 20000, 2480, 560)
     pwm = pwm_support.get_instance()
 
-    pulse_value = pwm_support.calc_pulse(angle)
+    pulse_value = pwm_support.calc_pulse(angle + 12)
 
     # 接続されているサーボすべてを中心位置（ホーム）にする
     for i in tuple_ch:
-        print('チャンネル{0}に{1}\n'.format(i, pulse_value))
+        # print('チャンネル{0}に{1}\n'.format(i, pulse_value))
         pwm.set_pwm(i, 0, pulse_value)
+
+
+
+def serial_send(socket_com):
+    # Arduinoとのシリアル通信を準備
+    arduino = serial.Serial('/dev/ttyUSB0', 9600)
+    try:
+        while True:
+            data = socket_com.recv_str()
+            if data == 'QUIT':
+                break
+            data = data.split(':')
+            id = int(data[0])
+            rotate = int(data[1])
+            print('channel : {0}'.format(id))
+            print('angle : {0}\n'.format(rotate))
+
+            arduino.write(b'A')  # 文字を送信
+            num = 1
+            arduino.write(num.to_bytes(1, 'big'))  # 数字を送信
+
+    finally:
+        arduino.close()
+        socket_com.close()
+
+
+
+
+
+def test_servo():
+    while True:
+        data = input()
+        data = data.split(':')
+
+        channel = data[0]
+        angle = data[1]
+
+        if channel == 'all':
+            print('[Receive]')
+            print('channel : all')
+            print('angle : {0}\n'.format(angle))
+            RS306MD(int(angle))
+
+        else:
+            print('[Receive]')
+            print('channel : {0}'.format(channel))
+            print('angle : {0}\n'.format(angle))
+
+            RS306MD(int(angle), [int(channel)])
+
+
+def i2c_test():
+    try:
+        bus = smbus2.SMBus(1)
+        SLAVE_ADDRESS = 0x08
+        while True:
+
+            cmd = input("入力してください：")
+            if cmd == 'send':
+                bus.write_byte(SLAVE_ADDRESS, ord('A'))
+            elif cmd == 'receive':
+                read_data = bus.read_byte(SLAVE_ADDRESS)
+                print(read_data)
+
+    except KeyboardInterrupt:
+        print("プログラムを終了します...")
+        pass
+
+
+def i2c_krs2552rhv():
+    try:
+        bus = smbus2.SMBus(1)
+        SLAVE_ADDRESS = 0x08
+
+        while True:
+            # data = socket_com.recv_str()
+            data = input()
+            data = data.split(':')
+
+            channel = int(data[0])
+            rotate = int(data[1]) + 135
+            # rotate = int(data[1])
+
+            value = int((rotate / 270) * (9500 - 5500) + 5500)
+            low = value & 0xff
+            high = value >> 8
+            high = high & 0xff
+
+            print('Log channel : {0}'.format(channel))
+            print('Log rotate : {0}'.format(rotate))
+            print('Log value : {0}\n'.format(value))
+
+            bus.write_byte(SLAVE_ADDRESS, ord('D'))
+            bus.write_byte(SLAVE_ADDRESS, channel)
+            bus.write_byte(SLAVE_ADDRESS, low)
+            bus.write_byte(SLAVE_ADDRESS, high)
+
+    except KeyboardInterrupt:
+        pass
+
+    finally:
+        bus.close()
+        # socket_com.close_socket()
+        pass
