@@ -8,11 +8,11 @@ import concurrent.futures
 # TODO: 適切な例外処理がなされていない。
 
 class SupportSocketServer:
-    def __init__(self, host, port, recv_size=1024):
+    def __init__(self, address, port, recv_size=1024):
         self.executor = concurrent.futures.ThreadPoolExecutor(max_workers=1)
 
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # SOCK_STREAMでTCPを指定している。
-        self.socket.bind((host, port))  # 紐付けする
+        self.socket.bind((address, port))  # 紐付けする
         self.socket.listen(5)  # 接続の待受をする。キューの最大数を指定。（なんの？）
 
         print('クライアントからの接続を待ち....')
@@ -106,7 +106,7 @@ class SupportSocketClient:
         except IOError:
             print('コネクトでエラー発生。')
 
-    def socket(self):
+    def close(self):
         print('通信を終了します。')
         self.socket.close()
 
