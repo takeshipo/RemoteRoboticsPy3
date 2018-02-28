@@ -49,5 +49,5 @@ if __name__ == '__main__':
     # Arduino = serial.Serial('/dev/ttyUSB0', 9600)
 
     move_servo(connection)
-    # テスト
+    # テストSlack
     # test_servo()
