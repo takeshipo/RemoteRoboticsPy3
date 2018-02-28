@@ -11,29 +11,6 @@ class SupportSocketServer:
     def __init__(self, host, port, recv_size=1024):
         self.executor = concurrent.futures.ThreadPoolExecutor(max_workers=1)
 
-        # 受け取ったbyteコードをutf8にデコードして返す
-        def r_func():
-            try:
-                data = self.socket.recv(recv_size)
-                return data
-
-            except IOError:
-                print('受信でエラー発生！通信を終了します。')
-                self.socket.close()
-
-        self.recv_func = r_func
-
-        def s_func(data):
-            try:
-                self.socket.send(data)
-                print(data)
-
-            except IOError:
-                print('送信でエラー発生！通信を終了します。')
-                self.socket.close()
-
-        self.send_func = s_func
-
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # SOCK_STREAMでTCPを指定している。
         self.socket.bind((host, port))  # 紐付けする
         self.socket.listen(5)  # 接続の待受をする。キューの最大数を指定。（なんの？）
@@ -41,6 +18,32 @@ class SupportSocketServer:
         print('クライアントからの接続を待ち....')
         self.client_socket, self.client_info = self.socket.accept()
         print("完了！")
+
+        # 受け取ったbyteコードをutf8にデコードして返す
+        def r_func():
+            try:
+                data = self.client_socket.recv(recv_size)
+                return data
+
+            except IOError:
+                print('受信でエラー発生！通信を終了します。')
+                self.client_socket.close()
+                self.socket.close()
+
+        self.recv_func = r_func
+
+        def s_func(data):
+            try:
+                self.client_socket.send(data)
+                # print(data)
+
+            except IOError:
+                print('送信でエラー発生！通信を終了します。')
+                self.client_socket.close()
+                self.socket.close()
+
+        self.send_func = s_func
+
 
     # 受け取ったbyteコードをutf8にデコードして返す
     def recv_str(self):
@@ -55,8 +58,8 @@ class SupportSocketServer:
     def send_str(self, data):
         self.executor.submit(self.send_func, bytes(data.encode('utf-8')))
 
-    def send_byte(self, data):
-        self.executor.submit(self.send_func,data)
+    def send_bytes(self, data):
+        self.executor.submit(self.send_func, data)
 
     def close(self):
         print('通信を終了します。')
