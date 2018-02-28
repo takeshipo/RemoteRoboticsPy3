@@ -7,9 +7,15 @@ server = SupportSocketServer('', 55555)
 
 try:
     while True:
-        sleep(10)
-        data = {b'a',b'c',b'd',b'e'}
-        server.send_byte(data)
+        rotate = int(input('input:'))
+        rotate_l = (rotate & 0xff).to_bytes(1, 'big')
+        rotate_h = ((rotate >> 8) & 0xff).to_bytes(1, 'big')
+
+        data = bytearray(0x00.to_bytes(1, 'big') + 0x01.to_bytes(1, 'big') + rotate_h + rotate_l)
+
+        # data = b'abcd'
+        # server.send_str(data)
+        server.send_bytes(data)
         print('送信')
 
 
