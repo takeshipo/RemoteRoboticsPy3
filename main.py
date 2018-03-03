@@ -21,7 +21,12 @@ def behavior_servo(connection):
 
             sub_cmd = data[0]  # int.from_bytes((data[0]), 'big')
             id = data[1]
-            rotate = int((data[2] << 8) or data[3])  # シフトできる？
+            # rotate = int((data[2] << 8) or data[3])  # シフトできる？
+            sign_flg = data[2]
+            if sign_flg == 0:
+                rotate = int(data[2])
+            elif sign_flg == 1:
+                rotate = int(data[2]) * -1
 
             print('[Receive]')
             print('id : {0}'.format(id))
@@ -42,7 +47,7 @@ def behavior_servo(connection):
 
 
 if __name__ == '__main__':
-    host = '92,168.43.181'  # ドメイン名、もしくはIPアドレス。socket.gethostname()を代入するとドメイン名を調べてくれる。
+    host = '192.168.43.181'  # ドメイン名、もしくはIPアドレス。socket.gethostname()を代入するとドメイン名を調べてくれる。
     port = 55555  # wellknownにぶつからない適当なポート番号。クライアント側とサーバー側でポート番号を合わせる
     connection = SupportSocketClient(host, port, 4)
 
