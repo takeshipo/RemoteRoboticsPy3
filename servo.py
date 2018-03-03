@@ -93,7 +93,6 @@ def RS306MD(angle, tuple_ch=range(0, 16)):
         pwm.set_pwm(i, 0, pulse_value)
 
 
-
 def serial_send(socket_com):
     # Arduinoとのシリアル通信を準備
     arduino = serial.Serial('/dev/ttyUSB0', 9600)
@@ -115,9 +114,6 @@ def serial_send(socket_com):
     finally:
         arduino.close()
         socket_com.close()
-
-
-
 
 
 def test_servo():
