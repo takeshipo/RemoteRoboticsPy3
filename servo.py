@@ -2,6 +2,7 @@
 from com_socket import *
 from pwm import *
 
+
 # --- KHR3HVv2のID設定 ---
 # AnkleLeft = 14  # 左足首
 # AnkleRight = 18  # 右足首
