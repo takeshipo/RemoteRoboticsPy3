@@ -3,11 +3,15 @@ from com_socket import *
 from servo import *
 
 
-def behavior_servo(connection):
+def kinect_to_robo_zero():
+    host = '192.168.43.181'  # ドメイン名、もしくはIPアドレス。socket.gethostname()を代入するとドメイン名を調べてくれる。
+    port = 55555  # wellknownにぶつからない適当なポート番号。クライアント側とサーバー側でポート番号を合わせる
+    connection = SupportSocketClient(host, port, 4)
+
     try:
-        support_RS306MD = SupportServoDriver(288, 20000, 2480, 560)
-        pwm1 = support_RS306MD.get_instance(address=0x40)
-        pwm2 = support_RS306MD.get_instance(address=0x41)
+        servo = PwmServoConfigData().get_RS306MD()
+        pwm1 = SupportServoDriver(address=0x40, config_data=servo)
+        pwm2 = SupportServoDriver(address=0x41, config_data=servo)
 
         while True:
             data = connection.recv_raw()
@@ -20,37 +24,32 @@ def behavior_servo(connection):
             # angle = int(data[1])
 
             sub_cmd = data[0]  # int.from_bytes((data[0]), 'big')
-            id = data[1]
-            # rotate = int((data[2] << 8) or data[3])  # シフトできる？
-            sign_flg = data[2]
+            channel = data[1]
+            sign_flg = data[2]  # ここは符号を表す
+
+            # FIXME: あれ？ここのdata[2]はdata[3]の間違いじゃない？
             if sign_flg == 0:
-                rotate = int(data[2])
+                angle = int(data[2])
             elif sign_flg == 1:
-                rotate = int(data[2]) * -1
+                angle = int(data[2]) * -1
 
             print('[Receive]')
-            print('id : {0}'.format(id))
-            print('rotate : {0}\n'.format(rotate))
+            print('id : {0}'.format(channel))
+            print('rotate : {0}\n'.format(angle))
+
+            # FIXME: 0°に出力してもうまく出来ない。数値や計算は問題ない。+12°くらいで実際の0°になる。
+            angle += 12
 
             # 16以下なら上半身
-            if id < 16:
-                pulse_value = support_RS306MD.calc_pulse(rotate)
-                pwm1.set_pwm(id, 0, pulse_value)
+            if channel < 16:
+                pwm1.to_angle(channel, angle)
 
             else:
-                id -= 16
-                pulse_value = support_RS306MD.calc_pulse(rotate)
-                pwm2.set_pwm(id, 0, pulse_value)
-
+                channel -= 16
+                pwm2.to_angle(channel, angle)
     finally:
         connection.close()
 
 
 if __name__ == '__main__':
-    host = '192.168.43.181'  # ドメイン名、もしくはIPアドレス。socket.gethostname()を代入するとドメイン名を調べてくれる。
-    port = 55555  # wellknownにぶつからない適当なポート番号。クライアント側とサーバー側でポート番号を合わせる
-    connection = SupportSocketClient(host, port, 4)
-
-    # Arduino = serial.Serial('/dev/ttyUSB0', 9600)
-
-    behavior_servo(connection)
+    pwm_servo_driver_test(PwmServoConfigData().get_RS306MD())
