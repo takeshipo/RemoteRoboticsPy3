@@ -35,3 +35,56 @@ class SupportServoDriver(object):
 
         # 少数は切り捨て打て整数で返す
         return int(pulse_value)
+
+
+# TODO : きれいにDataClassにする
+class PwmServoConfigData:
+
+    def __init__(self):
+        # ---デフォルト値は一般的に利用されやすい値が入っている。---
+        # 値はすべてマイクロ秒で指定する
+
+        # サーボの最大角
+        self.range_angle = 180
+
+        # PWMの一周期。
+        self.pulse_period = 20000
+
+        # サーボの最大角に対応するパルス幅
+        self.servo_max = 2000
+
+        # サーボの最小角に対応するパルス幅
+        self.servo_min = 700
+
+    def get_SG92R(self):
+        # TODO : 正しくないかもなので
+        self.range_angle = 180  # 可動域（角度）
+        self.pulse_period = 20000
+        self.servo_max = 2000
+        self.servo_min = 700
+        return self
+
+    def get_MG92B(self):
+        self.range_angle = 365  # 可動域（角度）
+        self.pulse_period = 20000
+        self.servo_max = 2480
+        self.servo_min = 560
+        return self
+
+    def get_RS306MD(self):
+        self.range_angle = 288  # 可動域（角度）
+        self.pulse_period = 20000
+        self.servo_max = 2480
+        self.servo_min = 560
+        return self
+
+    def get_KRS2552RHV(self):
+        # KRS-2552RHVのデータシートより、
+        # PWMの周期は 3msec〜30msecに対応する。ここでは20000μsec(=50Hz)とする。
+        # パルス幅は 700μsec〜2300μsec が 0°〜270°に対応する。
+        self.pulse_period = 20000
+        self.servo_max = 2300
+        self.servo_min = 700
+        self.range_angle = 270  # 可動域（角度）
+        return self
+
