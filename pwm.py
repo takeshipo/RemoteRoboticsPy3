@@ -4,7 +4,6 @@ from __future__ import division
 import Adafruit_PCA9685
 
 
-# TODO: isRiversがTrueだったときの処理が記述されていない
 # ライブラリの利用をサポートするクラス
 class SupportServoDriver(object):
 
@@ -37,7 +36,7 @@ class SupportServoDriver(object):
         return int(pulse_value)
 
 
-# TODO : きれいにDataClassにする
+# TODO : きれいなDataClassにする。要リファクタリング。
 class PwmServoConfigData:
 
     def __init__(self):
@@ -45,19 +44,19 @@ class PwmServoConfigData:
         # 値はすべてマイクロ秒で指定する
 
         # サーボの最大角
-        self.range_angle = 180
+        self.range_angle = None
 
         # PWMの一周期。
-        self.pulse_period = 20000
+        self.pulse_period = None
 
         # サーボの最大角に対応するパルス幅
-        self.servo_max = 2000
+        self.servo_max = None
 
         # サーボの最小角に対応するパルス幅
-        self.servo_min = 700
+        self.servo_min = None
 
     def get_SG92R(self):
-        # TODO : 正しくないかもなので
+        # FIXME: データシートが見つからないので正しい値が不明。要検証。
         self.range_angle = 180  # 可動域（角度）
         self.pulse_period = 20000
         self.servo_max = 2000
@@ -65,10 +64,11 @@ class PwmServoConfigData:
         return self
 
     def get_MG92B(self):
+        # FIXME: データシートが見つからないので正しい値が不明。要検証。
         self.range_angle = 365  # 可動域（角度）
         self.pulse_period = 20000
-        self.servo_max = 2480
-        self.servo_min = 560
+        self.servo_max = 2000
+        self.servo_min = 700
         return self
 
     def get_RS306MD(self):
@@ -87,4 +87,3 @@ class PwmServoConfigData:
         self.servo_min = 700
         self.range_angle = 270  # 可動域（角度）
         return self
-
