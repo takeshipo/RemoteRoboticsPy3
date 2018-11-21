@@ -1,3 +1,4 @@
+# coding=utf-8
 # サーバー側で利用するテスト用ソースです。
 
 from com_socket import *

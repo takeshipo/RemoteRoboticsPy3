@@ -1,152 +1,89 @@
 # coding=utf-8
-from com_socket import *
-from pwm import *
+from __future__ import division
+
+import Adafruit_PCA9685
 
 
-# --- KHR3HVv2のID設定 ---
-# AnkleLeft = 14  # 左足首
-# AnkleRight = 18  # 右足首
-# ElbowLeft = 5  # 左肘
-# ElbowRight = 9  # 右肘
-# FootLeft = 15  # 左足先
-# FootRight = 19  # 右足先
-# HandLeft = 7  # 左手
-# HandRight = 11  # 右手
-# # HandTipLeft = 21  # Tip of the left hand
-# # HandTipRight = 23 # Tip of the right hand
-# Head = 3  # 頭
-# HipLeft = 12  # 左ヒップ
-# HipRight = 16  # 右ヒップ
-# KneeLeft = 13  # 左ひざ
-# KneeRight = 17  # 右ひざ
-# Neck = 2  # 首
-# ShoulderLeft = 4  # 左肩
-# ShoulderRight = 8  # 右肩
-# SpineBase = 0  # 背骨
-# SpineMid = 1  # 腰
-# # SpineShoulder = 20  # Spine at the shoulder
-# # ThumbLeft = 22  # 左親指
-# # ThumbRight = 24  # 右親指
-# WristLeft = 6  # 左手首
-# WristRight = 10  # 右手首
+# ライブラリの利用をサポートするクラス
+class SupportServoDriver(object):
 
-def pwm_driver_test(config_data):
-    pwm = SupportServoDriver(config_data=config_data)
+    def __init__(self, config_data, address=0x40):
+        self.config_data = config_data
+        self.pwm = Adafruit_PCA9685.PCA9685(address)  # ライブラリ(PCA9685)をインスタンス化
+        self.pwm.set_pwm_freq(1000000 / self.config_data.pulse_period)  # デフォルトのままなら50HZ
 
-    while True:
-        # [チャンネル : 角度] の形式で入力を受け付ける。チャンネルに[all]と入力すると全てに出力する。
-        data = input()
-        data = data.split(':')
+    def to_angle(self, channel, angle):
+        pulse_value = self.calc_pulse(angle)
+        self.pwm.set_pwm(channel, 0, pulse_value)
 
-        channel = data[0]
-        angle = data[1]
+    # 角度を受け取ってPCA9685に対応した値を算出する
+    def calc_pulse(self, angle):
+        # パルス幅よりDuty比を求める。
+        min_duty = self.config_data.servo_min / self.config_data.pulse_period
+        max_duty = self.config_data.servo_max / self.config_data.pulse_period
 
-        if channel == 'all':
-            print('[Receive]')
-            print('channel : all')
-            print('angle : {0}\n'.format(angle))
+        # 全体に対して何％の角度か求める。例えば、フルが180°に対しての60°であれば33%。
+        # par_angle = (angle / self.range_angle)  # 中心を90°として角度を指定する場合
+        par_angle = (angle / self.config_data.range_angle) + 0.5  # 中心を0°として角度を指定する場合
 
-            # 接続されているサーボすべてを中心位置（ホーム）にする
-            for i in range(0, 16):
-                pwm.to_angle(i, int(angle + 12))
+        # 角度からDuty比を求める
+        duty = ((max_duty - min_duty) * par_angle) + min_duty
 
-        else:
-            print('[Receive]')
-            print('channel : {0}'.format(channel))
-            print('angle : {0}\n'.format(angle))
+        # PCA9685（サーボドライバ）は12bit扱うことができるのでDuty比を乗算して対応した値にする。
+        pulse_value = duty * 4096
 
-            pwm.to_angle(int(channel), int(angle + 12))
+        # 少数は切り捨て打て整数で返す
+        return int(pulse_value)
 
 
-def i2c_test():
-    try:
-        bus = smbus2.SMBus(1)
-        SLAVE_ADDRESS = 0x08
-        while True:
+# TODO : きれいなDataClassにする。要リファクタリング。
+class ServoPwmConfigData:
 
-            cmd = input("入力してください：")
-            if cmd == 'send':
-                bus.write_byte(SLAVE_ADDRESS, ord('A'))
-            elif cmd == 'receive':
-                read_data = bus.read_byte(SLAVE_ADDRESS)
-                print(read_data)
+    def __init__(self):
+        # ---デフォルト値は一般的に利用されやすい値が入っている。---
+        # 値はすべてマイクロ秒で指定する
 
-    except KeyboardInterrupt:
-        print("プログラムを終了します...")
-        pass
+        # サーボの最大角
+        self.range_angle = None
 
-    finally:
-        bus.close()
-        # socket_com.close_socket()
-        pass
+        # PWMの一周期。
+        self.pulse_period = None
 
+        # サーボの最大角に対応するパルス幅
+        self.servo_max = None
 
-def serial_test(socket_com):
-    # Arduinoとのシリアル通信を準備
-    arduino = serial.Serial('/dev/ttyUSB0', 9600)
-    try:
-        while True:
-            data = socket_com.recv_str()
-            if data == 'QUIT':
-                break
-            data = data.split(':')
-            id = int(data[0])
-            rotate = int(data[1])
-            print('channel : {0}'.format(id))
-            print('angle : {0}\n'.format(rotate))
+        # サーボの最小角に対応するパルス幅
+        self.servo_min = None
 
-            arduino.write(b'A')  # 文字を送信
-            num = 1
-            arduino.write(num.to_bytes(1, 'big'))  # 数字を送信
+    def get_SG92R(self):
+        # FIXME: データシートが見つからないので正しい値が不明。要検証。
+        self.range_angle = 180  # 可動域（角度）
+        self.pulse_period = 20000
+        self.servo_max = 2000
+        self.servo_min = 700
+        return self
 
-    finally:
-        arduino.close()
-        socket_com.close()
+    def get_MG92B(self):
+        # FIXME: データシートが見つからないので正しい値が不明。要検証。
+        self.range_angle = 365  # 可動域（角度）
+        self.pulse_period = 20000
+        self.servo_max = 2000
+        self.servo_min = 700
+        return self
 
+    def get_RS306MD(self):
+        self.range_angle = 288  # 可動域（角度）
+        self.pulse_period = 20000
+        self.servo_max = 2480
+        self.servo_min = 560
+        return self
 
-def kinect_to_robo_zero():
-    host = '192.168.43.181'  # ドメイン名、もしくはIPアドレス。socket.gethostname()を代入するとドメイン名を調べてくれる。
-    port = 55555  # wellknownにぶつからない適当なポート番号。クライアント側とサーバー側でポート番号を合わせる
-    connection = SupportSocketClient(host, port, 4)
-
-    try:
-        servo = PwmServoConfigData().get_RS306MD()
-        pwm1 = SupportServoDriver(address=0x40, config_data=servo)
-        pwm2 = SupportServoDriver(address=0x41, config_data=servo)
-
-        while True:
-            data = connection.recv_raw()
-
-            if data == b'':
-                break
-
-            # data = data.split(':')
-            # channel = int(data[0])
-            # angle = int(data[1])
-
-            sub_cmd = data[0]  # int.from_bytes((data[0]), 'big')
-            channel = data[1]
-            sign_flg = data[2]  # ここは符号を表す
-
-            # FIXME: あれ？ここのdata[2]はdata[3]の間違いじゃない？
-            if sign_flg == 0:
-                angle = int(data[2])
-            elif sign_flg == 1:
-                angle = int(data[2]) * -1
-
-            print('[Receive]')
-            print('id : {0}'.format(channel))
-            print('rotate : {0}\n'.format(angle))
-
-            # FIXME: 0°に出力してもうまく出来ない。数値や計算は問題ない。+12°くらいで実際の0°になる。
-            angle += 12
-
-            # 16以下なら上半身
-            if channel < 16:
-                pwm1.to_angle(channel, angle)
-
-            else:
-                channel -= 16
-                pwm2.to_angle(channel, angle)
-    finally:
-        connection.close()
+    def get_KRS2552RHV(self):
+        # KRS-2552RHVのデータシートより、
+        # PWMの周期は 3msec〜30msecに対応する。ここでは20000μsec(=50Hz)とする。
+        # パルス幅は 700μsec〜2300μsec が 0°〜270°に対応する。
+        self.pulse_period = 20000
+        self.servo_max = 2300
+        self.servo_min = 700
+        self.range_angle = 270  # 可動域（角度）
+        return self

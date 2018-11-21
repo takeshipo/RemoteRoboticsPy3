@@ -1,6 +1,10 @@
-RaspberryPiに接続されたサーボにソケット通信を通じて角度を与える
+RaspberryPiでのサーボ制御用
 
 ## 環境
- Raspberry Pi3
- PCA9685(サーボドライバ)
- Python 3
+ - Python 3.x  
+ - Raspberry Pi 3  
+ - Raspbean  
+ - PCA9685(サーボドライバ)  
+ 
+### サーボドライバのライブラリ1
+https://github.com/adafruit/Adafruit_Python_PCA9685
