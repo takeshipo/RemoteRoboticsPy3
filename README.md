@@ -1,3 +1,4 @@
+## 書きかけ
 RaspberryPiでのサーボ制御用
 
 ## 環境
@@ -6,5 +7,12 @@ RaspberryPiでのサーボ制御用
  - Raspbean  
  - PCA9685(サーボドライバ)  
  
-### サーボドライバのライブラリ1
+### セットアップ
+
+#### サーボドライバのライブラリ  
 https://github.com/adafruit/Adafruit_Python_PCA9685
+
+#### i2cを使用する場合
+```
+sudo apt-get install i2c-tools python-smbus
+```
