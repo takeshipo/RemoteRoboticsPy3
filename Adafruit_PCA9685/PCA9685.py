@@ -52,14 +52,14 @@ OUTDRV             = 0x04
 logger = logging.getLogger(__name__)
 
 
-def software_reset(i2c=None, **kwargs):
-    """Sends a software reset (SWRST) command to all servo drivers on the bus."""
-    # Setup I2C interface for device 0x00 to talk to all of them.
-    if i2c is None:
-        import Adafruit_GPIO.I2C as I2C
-        i2c = I2C
-    self._device = i2c.get_i2c_device(0x00, **kwargs)
-    self._device.writeRaw8(0x06)  # SWRST
+# def software_reset(i2c=None, **kwargs):
+#     """Sends a software reset (SWRST) command to all servo drivers on the bus."""
+#     # Setup I2C interface for device 0x00 to talk to all of them.
+#     if i2c is None:
+#         import Adafruit_GPIO.I2C as I2C
+#         i2c = I2C
+#     self._device = i2c.get_i2c_device(0x00, **kwargs)
+#     self._device.writeRaw8(0x06)  # SWRST
 
 
 class PCA9685(object):
