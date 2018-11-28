@@ -44,7 +44,6 @@ class SupportSocketServer:
 
         self.send_func = s_func
 
-
     # 受け取ったbyteコードをutf8にデコードして返す
     def recv_str(self):
         future = self.executor.submit(self.recv_func)
