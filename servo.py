@@ -32,11 +32,10 @@ class ServoPwmConfigData:
         return self
 
     def get_SG92R(self):
-        # FIXME: データシートが見つからないので正しい値が不明。要検証。
         self.range_angle = 180  # 可動域（角度）
         self.pulse_period = 20000
-        self.servo_max = 2000
-        self.servo_min = 700
+        self.servo_max = 2400
+        self.servo_min = 500
         return self
 
     def get_MG92B(self):

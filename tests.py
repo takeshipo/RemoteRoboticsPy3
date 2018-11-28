@@ -20,14 +20,14 @@ def pwm_driver_test(config_data):
 
             # 接続されているサーボすべてを中心位置（ホーム）にする
             for i in range(0, 16):
-                pwm.to_angle(i, int(angle + 12))
+                pwm.to_angle(i, int(angle))
 
         else:
             print('[Receive]')
             print('channel : {0}'.format(channel))
             print('angle : {0}\n'.format(angle))
 
-            pwm.to_angle(int(channel), int(angle + 12))
+            pwm.to_angle(int(channel), int(angle))
 
 
 def i2c_test():
