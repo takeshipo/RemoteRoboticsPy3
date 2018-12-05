@@ -3,52 +3,32 @@ import socket
 import concurrent.futures
 
 
-# TCP扱うクラス
-# TODO: これらクラス一つにまとめた方が良い？
-# TODO: 適切な例外処理がなされていない。
+# SOCK_STREAMでTCP、SOCK_DGRAMでUDP
+# socket.AF_INET
 
-class SupportSocketServer:
+class TcpServer:
     def __init__(self, address, port, recv_size=1024):
+        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.socket.bind((address, port))
+        self.socket.listen(5)
+
+        print('クライアントデバイスからの接続待ち....')
+        self.client_socket, self.client_info = self.socket.accept()
+        print("接続完了")
+
         self.executor = concurrent.futures.ThreadPoolExecutor(max_workers=1)
 
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # SOCK_STREAMでTCPを指定している。
-        self.socket.bind((address, port))  # 紐付けする
-        self.socket.listen(5)  # 接続の待受をする。キューの最大数を指定。（なんの？）
+        self.recv_func = lambda: self.client_socket.recv(recv_size)
+        self.send_func = lambda data: self.client_socket.send(data)
 
-        print('クライアントからの接続を待ち....')
-        self.client_socket, self.client_info = self.socket.accept()
-        print("完了！")
-
-        # 受け取ったbyteコードをutf8にデコードして返す
-        def r_func():
-            try:
-                data = self.client_socket.recv(recv_size)
-                return data
-
-            except IOError:
-                print('受信でエラー発生！通信を終了します。')
-                self.client_socket.close()
-                self.socket.close()
-
-        self.recv_func = r_func
-
-        def s_func(data):
-            try:
-                self.client_socket.send(data)
-                # print(data)
-
-            except IOError:
-                print('送信でエラー発生！通信を終了します。')
-                self.client_socket.close()
-                self.socket.close()
-
-        self.send_func = s_func
-
-    # 受け取ったbyteコードをutf8にデコードして返す
     def recv_str(self):
         future = self.executor.submit(self.recv_func)
         result = future.result()
+        # 受け取ったデータをutf8にデコードする
         return bytes(result).decode('utf-8')
+
+    def send_str(self, data):
+        self.executor.submit(self.send_func, bytes(data.encode('utf-8')))
 
     def recv_raw(self):
         future = self.executor.submit(self.recv_func)

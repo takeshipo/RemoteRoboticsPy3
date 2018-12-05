@@ -1,29 +1,31 @@
 # coding=utf-8
-from tests import *
-from servo import *
 from com_socket import *
 
 if __name__ == '__main__':
 
-    host = "192.168.10.7"  # ドメイン名、もしくはIPアドレス。socket.gethostname()を代入するとドメイン名を調べてくれる。
-    port = 55555  # wellknownにぶつからない適当なポート番号。クライアント側とサーバー側でポート番号を合わせる
-    connection = SupportSocketServer(host, port)
+    # ドメイン名、もしくはIPアドレス。
+    # ドメイン名は socket.gethostname() で取得することもできる。
+    host = "192.168.10.7"
+
+    # wellknownと衝突しない適当なポート番号
+    port = 55555
+
+    connection = TcpServer(host, port)
 
     try:
-
         while True:
-            data = connection.recv_raw()
+            data = connection.recv_str()
 
-            if data == b'a':
-                print("aaa")
-                break
+            if data == 'LED_1_ON':
+                # 何かしらの処理。例としてLEDを点灯
+                print("LED_1_ON")
 
-            elif data == b'b':
-                print("bbb")
-                break
+            elif data == 'LED_2_ON':
+                print("LED_2_ON")
 
-            elif data == b'q':
+            elif data == 'QUIT':
                 print("quit")
+                quit()
                 break
 
     finally:

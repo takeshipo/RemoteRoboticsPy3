@@ -4,7 +4,7 @@
 from com_socket import *
 from time import sleep
 
-server = SupportSocketServer('', 55555)
+server = TcpServer('', 55555)
 
 try:
     while True:
