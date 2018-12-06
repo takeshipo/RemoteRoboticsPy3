@@ -2,11 +2,20 @@
 from servo import *
 
 
-# 前進
-def hexapod_forward():
-    servo = ServoPwmConfigData().get_MG92B()  # ここでサーボを選択
-    pwm = SupportServoDriver(config_data=servo)
+class Hexapod(object):
 
-    # 第一引数がチャンネル、第二引数が角度
-    pwm.to_angle(0, 0)
-    pwm.to_angle(1, 0)
+    def __init__(self):
+        self.servo = ServoPwmConfigData().get_MG92B()  # ここでサーボを選択
+        self.pwm = SupportServoDriver(config_data=self.servo)
+
+    def on_foward(self):
+        print("前進")
+
+    def on_bacnkward(self):
+        print("後進")
+
+    def on_left_turn(self):
+        print("前進")
+
+    def on_right_turn(self):
+        print("前進")
