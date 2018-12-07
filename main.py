@@ -2,15 +2,10 @@
 from com_socket import *
 from hexapod import Hexapod
 
-if __name__ == '__main__':
 
-    # ドメイン名、もしくはIPアドレス。
-    # ドメイン名は socket.gethostname() で取得することもできる。
+def remoteHexapod():
     host = "192.168.10.7"
-
-    # wellknownと衝突しない適当なポート番号
     port = 55555
-
     connection = SupportSocketServer(host, port)
 
     hexapod = Hexapod()
@@ -40,3 +35,12 @@ if __name__ == '__main__':
 
     finally:
         connection.close()
+
+
+def testHexapod():
+    hexapod = Hexapod()
+    hexapod.on_foward()
+
+
+if __name__ == '__main__':
+    remoteHexapod()
