@@ -13,55 +13,63 @@ class Hexapod(object):
 
         self.state = 'ON_NEWTRAL'
 
-        def on_forward():
-            print("前進")
-            # TODO : 処理
+        # self.forward = on_forward
+        # self.backward = on_backward
+        # self.left_turn = on_left_turn
+        # self.right_turn = on_right_turn
+        # self.stop = on_stop
+        # self.neutral = on_neutral
 
-        def on_backward():
-            print("後進")
-            # TODO : 処理
+        def func():
+            if self.state == 'ON_FORWARD':
+                self.on_forward()
 
-        def on_left_turn():
-            print("左旋回")
-            # TODO : 処理
+            elif self.state == 'ON_RIGHT_TURN':
+                self.on_right_turn()
 
-        def on_right_turn():
-            print("右旋回")
-            # TODO : 処理
+            elif self.state == 'ON_LEFT_TURN':
+                self.on_left_turn()
 
-        def on_stop():
-            print('ストップ')
-            # TODO : 処理
+            elif self.state == 'ON_BACKWARD':
+                self.on_backward()
 
-        def on_neutral():
-            print('ニュートラルポジション')
-            # TODO : 処理
+            elif self.state == 'ON_STOP':
+                self.on_stop()
 
-        self.forward = on_forward
-        self.backward = on_backward
-        self.left_turn = on_left_turn
-        self.right_turn = on_right_turn
-        self.stop = on_stop
-        self.neutral = on_neutral
+            elif self.state == 'ON_NEWTRAL':
+                self.on_neutral()
 
-    def exec(self):
-        if self.state == 'ON_FORWARD':
-            self.executor.submit(self.forward)
+        self.exec = func
 
-        elif self.state == 'ON_RIGHT_TURN':
-            self.executor.submit(self.right_turn)
+        while True:
+            future = self.executor.submit(self.exec)
+            result = future.result()
+            # TODO : ここでエラーハンドリング
 
-        elif self.state == 'ON_LEFT_TURN':
-            self.executor.submit(self.left_turn)
+    def on_forward(self):
+        print("前進")
+        # TODO : 処理
+        return True  # 成功したらTrue
 
-        elif self.state == 'ON_BACKWARD':
-            self.executor.submit(self.backward)
+    def on_backward(self):
+        print("後進")
+        # TODO : 処理
 
-        elif self.state == 'ON_STOP':
-            self.executor.submit(self.stop)
+    def on_left_turn(self):
+        print("左旋回")
+        # TODO : 処理
 
-        elif self.state == 'ON_NEWTRAL':
-            self.executor.submit(self.neutral)
+    def on_right_turn(self):
+        print("右旋回")
+        # TODO : 処理
+
+    def on_stop(self):
+        print('ストップ')
+        # TODO : 処理
+
+    def on_neutral(self):
+        print('ニュートラルポジション')
+        # TODO : 処理
 
 
 def control_tcp():
