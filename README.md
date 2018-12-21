@@ -60,5 +60,5 @@ $ curl https://raw.githubusercontent.com/kennethreitz/pipenv/master/get-pipenv.p
 ```
 cd (開発ディレクトリ)
 pipenv install
-pipenv run start
+pipenv run hexapod
 ```
