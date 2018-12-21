@@ -19,8 +19,7 @@ class SupportSocketServer:
         self.client_socket, self.client_info = self.socket.accept()
         print("完了！")
 
-        # 受け取ったbyteコードをutf8にデコードして返す
-        def r_func():
+        def recv_func():
             try:
                 data = self.client_socket.recv(recv_size)
                 return data
@@ -30,7 +29,7 @@ class SupportSocketServer:
                 self.client_socket.close()
                 self.socket.close()
 
-        self.recv_func = r_func
+        self.recv_func = recv_func
 
         def s_func(data):
             try:

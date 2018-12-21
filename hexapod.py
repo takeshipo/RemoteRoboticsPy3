@@ -1,9 +1,16 @@
 # coding=utf-8
-from servo import *
 from com_socket import *
+from enum import IntEnum
 
 
 class Hexapod(object):
+    class State(IntEnum):
+        ON_NEWTRAL = 199
+        ON_FORWARD = 200
+        ON_BACKWARD = 201
+        ON_RIGHT_TURN = 202
+        ON_LEFT_TURN = 203
+        ON_STOP = 204
 
     def __init__(self):
         self.executor = concurrent.futures.ThreadPoolExecutor(max_workers=1)
@@ -11,45 +18,33 @@ class Hexapod(object):
         # self.servo = ServoPwmConfigData().get_MG92B()  # ここでサーボを選択
         # self.pwm = SupportServoDriver(config_data=self.servo)
 
-        self.state = 'ON_NEWTRAL'
+        self.mState = Hexapod.State.ON_NEWTRAL
 
-        # self.forward = on_forward
-        # self.backward = on_backward
-        # self.left_turn = on_left_turn
-        # self.right_turn = on_right_turn
-        # self.stop = on_stop
-        # self.neutral = on_neutral
+    # TODO : STOPやNEWTRALは繰り返されないようにしたい
+    def start_control(self):
+        if self.mState == Hexapod.State.ON_FORWARD:
+            self.on_forward()
 
-        def func():
-            if self.state == 'ON_FORWARD':
-                self.on_forward()
+        elif self.mState == Hexapod.State.ON_RIGHT_TURN:
+            self.on_right_turn()
 
-            elif self.state == 'ON_RIGHT_TURN':
-                self.on_right_turn()
+        elif self.mState == Hexapod.State.ON_LEFT_TURN:
+            self.on_left_turn()
 
-            elif self.state == 'ON_LEFT_TURN':
-                self.on_left_turn()
+        elif self.mState == Hexapod.State.ON_BACKWARD:
+            self.on_backward()
 
-            elif self.state == 'ON_BACKWARD':
-                self.on_backward()
+        elif self.mState == Hexapod.State.ON_STOP:
+            self.on_stop()
 
-            elif self.state == 'ON_STOP':
-                self.on_stop()
+        elif self.mState == Hexapod.State.ON_NEWTRAL:
+            self.on_neutral()
 
-            elif self.state == 'ON_NEWTRAL':
-                self.on_neutral()
-
-        self.exec = func
-
-        while True:
-            future = self.executor.submit(self.exec)
-            result = future.result()
-            # TODO : ここでエラーハンドリング
+        self.executor.submit(fn=self.start_control)
 
     def on_forward(self):
         print("前進")
         # TODO : 処理
-        return True  # 成功したらTrue
 
     def on_backward(self):
         print("後進")
@@ -77,19 +72,23 @@ def control_tcp():
     # ip = socket.gethostbyname(host) # 何故かlocalhost取ってくる...
     ip = '192.168.10.10'
     port = 55555
+    CMD_QUIT = 999
+
     connection = SupportSocketServer(ip, port)
+
     hexapod = Hexapod()
+    hexapod.on_neutral()
+    hexapod.start_control()
 
     try:
         while True:
-            hexapod.exec()
 
-            data = connection.recv_str()
+            data = int.from_bytes(connection.recv_raw(), 'big')
 
-            if data == 'QUIT':
+            if data == CMD_QUIT:
                 quit()
 
-            hexapod.state = data
+            hexapod.mState = data
 
     finally:
         connection.close()
@@ -97,8 +96,7 @@ def control_tcp():
 
 def test():
     hexapod = Hexapod()
-    hexapod.state = 'ON_FORWARD'
-    hexapod.exec()
+    hexapod.on_forward()
 
 
 if __name__ == '__main__':
