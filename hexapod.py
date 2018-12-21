@@ -1,6 +1,7 @@
 # coding=utf-8
 from com_socket import *
 from enum import IntEnum
+from servo import *
 
 
 class Hexapod(object):
@@ -15,8 +16,8 @@ class Hexapod(object):
     def __init__(self):
         self.executor = concurrent.futures.ThreadPoolExecutor(max_workers=1)
 
-        # self.servo = ServoPwmConfigData().get_MG92B()  # ここでサーボを選択
-        # self.pwm = SupportServoDriver(config_data=self.servo)
+        self.servo = ServoPwmConfigData().get_MG92B()  # ここでサーボを選択
+        self.pwm = SupportServoDriver(config_data=self.servo)
 
         self.mState = Hexapod.State.ON_NEWTRAL
 
