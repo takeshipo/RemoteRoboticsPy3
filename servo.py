@@ -1,80 +1,67 @@
 # coding=utf-8
 from __future__ import division
 
+import concurrent.futures
+import dataclasses
+
 import Adafruit_PCA9685
 
 
 # サーボのPWM値のデータクラス
-# TODO : めちゃ汚い。要リファクタリング。
+@dataclasses.dataclass
 class ServoPwmConfigData:
+    # ---デフォルト値は一般的に利用されやすい値が入っている。---
+    # 値はすべてマイクロ秒で指定する
 
-    def __init__(self):
-        # ---デフォルト値は一般的に利用されやすい値が入っている。---
-        # 値はすべてマイクロ秒で指定する
+    # PWMの一周期。
+    pulse_period: int = 20000
 
-        # サーボの最大角
-        self.range_angle = None
+    # サーボの最大角（可動域）
+    range_angle: int = 180
 
-        # PWMの一周期。
-        self.pulse_period = None
+    # サーボの最大角に対応するパルス幅
+    servo_max: int = 2000
 
-        # サーボの最大角に対応するパルス幅
-        self.servo_max = None
+    # サーボの最小角に対応するパルス幅
+    servo_min: int = 1000
 
-        # サーボの最小角に対応するパルス幅
-        self.servo_min = None
 
-    def get_SG90(self):
-        self.range_angle = 180  # 可動域（角度）
-        self.pulse_period = 20000
-        self.servo_max = 2000
-        self.servo_min = 1000
-        return self
+def get_SG90():
+    return ServoPwmConfigData(20000, 180, 2000, 1000)
 
-    def get_SG92R(self):
-        self.range_angle = 180  # 可動域（角度）
-        self.pulse_period = 20000
-        self.servo_max = 2400
-        self.servo_min = 500
-        return self
 
-    def get_MG92B(self):
-        # FIXME: データシートが見つからないので正しい値が不明。要検証。
-        self.range_angle = 365  # 可動域（角度）
-        self.pulse_period = 20000
-        self.servo_max = 2000
-        self.servo_min = 700
-        return self
+def get_SG92R():
+    return ServoPwmConfigData(20000, 180, 2400, 500)
 
-    def get_RS306MD(self):
-        self.range_angle = 288  # 可動域（角度）
-        self.pulse_period = 20000
-        self.servo_max = 2480
-        self.servo_min = 560
-        return self
 
-    def get_KRS2552RHV(self):
-        # KRS-2552RHVのデータシートより、
-        # PWMの周期は 3msec〜30msecに対応する。ここでは20000μsec(=50Hz)とする。
-        # パルス幅は 700μsec〜2300μsec が 0°〜270°に対応する。
-        self.pulse_period = 20000
-        self.servo_max = 2300
-        self.servo_min = 700
-        self.range_angle = 270  # 可動域（角度）
-        return self
+def get_MG92B():
+    # FIXME: データシートが見つからないので正しい値が不明。要検証。
+    return ServoPwmConfigData(20000, 365, 2000, 700)
+
+
+def get_RS306MD():
+    return ServoPwmConfigData(20000, 288, 2480, 560)
+
+
+def get_KRS2552RHV():
+    # KRS-2552RHVのデータシートより、
+    # PWMの周期は 3msec〜30msecに対応する。ここでは20000μsec(=50Hz)とする。
+    return ServoPwmConfigData(20000, 270, 2300, 700)
 
 
 # ライブラリの利用をサポートするクラス
 class SupportServoDriver(object):
 
     def __init__(self, config_data, address=0x40):
+        self.executor = concurrent.futures.ThreadPoolExecutor(max_workers=1)
+
         self.config_data = config_data
         self.pwm = Adafruit_PCA9685.PCA9685(address)  # ライブラリ(PCA9685)をインスタンス化
         self.pwm.set_pwm_freq(1000000 / self.config_data.pulse_period)  # デフォルトのままなら50HZ
 
     def to_angle(self, channel, angle):
         pulse_value = self.calc_pulse(angle)
-        self.pwm.set_pwm(channel, 0, pulse_value)
+        self.executor.submit(fn=self.pwm.set_pwm(channel, 0, pulse_value))
 
     # 角度を受け取ってPCA9685に対応した値を算出する
     def calc_pulse(self, angle):

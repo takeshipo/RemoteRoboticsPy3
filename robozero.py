@@ -9,7 +9,7 @@ def tcp_to_robo_zero():
     connection = SupportSocketClient(host, port, 4)
 
     try:
-        servo_config = ServoPwmConfigData().get_RS306MD()
+        servo_config = get_RS306MD()
         pwm1 = SupportServoDriver(address=0x40, config_data=servo_config)  # 上半身
         pwm2 = SupportServoDriver(address=0x41, config_data=servo_config)  # 下半身
 
