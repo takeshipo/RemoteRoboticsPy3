@@ -3,9 +3,9 @@ from servo import *
 from com_socket import *
 
 
-def tcp_to_robo_zero():
-    host = '192.168.43.181'  # ドメイン名、もしくはIPアドレス。socket.gethostname()を代入するとドメイン名を調べてくれる。
-    port = 55555  # wellknownにぶつからない適当なポート番号。クライアント側とサーバー側でポート番号を合わせる
+def control_robozero():
+    host = '192.168.43.181'
+    port = 55555
     connection = SupportSocketClient(host, port, 4)
 
     try:

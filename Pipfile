@@ -12,4 +12,4 @@ adafruit-pca9685 = "*"
 python_version = "3.7"
 
 [scripts]
-hexapod = "python hexapod.py"
+hexapod = "python remote_robotics.py"
