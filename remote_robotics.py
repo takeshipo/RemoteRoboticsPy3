@@ -36,4 +36,5 @@ def test_hexapod():
 
 
 if __name__ == '__main__':
-    control_hexapod()
+    #control_hexapod()
+    test_hexapod()

@@ -1,6 +1,7 @@
 # coding=utf-8
 from enum import IntEnum
 from servo import *
+import time
 
 #角度変数
 #左足の動作
@@ -107,31 +108,31 @@ class Hexapod2axis(object):
         # ニュートラルポジション 0.05sec
         #---------------------------------------
         '''
-        pwm.to_angle(1, leftn)  
+        self.pwm.to_angle(1, leftn)
         time.sleep(0.004)
-        pwm.to_angle(7, rightn)  
+        self.pwm.to_angle(7, rightn)
         time.sleep(0.004)
-        pwm.to_angle(9, leftn)  
+        self.pwm.to_angle(9, leftn) 
         time.sleep(0.004)
-        pwm.to_angle(3, rightn)  
+        self.pwm.to_angle(3, rightn)
         time.sleep(0.004)
-        pwm.to_angle(5, leftn)  
+        self.pwm.to_angle(5, leftn) 
         time.sleep(0.004)
-        pwm.to_angle(11, rightn)  
-        time.sleep(0.004)
-
-        pwm.to_angle(0, 30)  
-        time.sleep(0.004)
-        pwm.to_angle(6, 0)  
-        time.sleep(0.004)
-        pwm.to_angle(8, -30)  
+        self.pwm.to_angle(11, rightn)
         time.sleep(0.004)
 
-        pwm.to_angle(2, -30)  
+        self.pwm.to_angle(0, 30)
         time.sleep(0.004)
-        pwm.to_angle(4, 0)  
+        self.pwm.to_angle(6, 0) 
         time.sleep(0.004)
-        pwm.to_angle(10, 30)  
+        self.pwm.to_angle(8, -30)
+        time.sleep(0.004)
+
+        self.pwm.to_angle(2, -30)
+        time.sleep(0.004)
+        self.pwm.to_angle(4, 0)
+        time.sleep(0.004)
+        self.pwm.to_angle(10, 30)
         time.sleep(0.004)
 
         time.sleep(0.05)
@@ -139,18 +140,18 @@ class Hexapod2axis(object):
         #---------------------------------------
         # 1段階動作
         #---------------------------------------
-        pwm.to_angle(1, leftup)  
+        self.pwm.to_angle(1, leftup)
         time.sleep(0.004)
-        pwm.to_angle(7, rightup)  
+        self.pwm.to_angle(7, rightup)
         time.sleep(0.004)
-        pwm.to_angle(9, leftup)  
+        self.pwm.to_angle(9, leftup)
         time.sleep(0.004)
 
-        pwm.to_angle(3, rightn)  
+        self.pwm.to_angle(3, rightn)
         time.sleep(0.004)
-        pwm.to_angle(5, leftn)  
+        self.pwm.to_angle(5, leftn)
         time.sleep(0.004)
-        pwm.to_angle(11, rightn)  
+        self.pwm.to_angle(11, rightn)
         time.sleep(0.004)
         
         time.sleep(0.1)
@@ -159,18 +160,18 @@ class Hexapod2axis(object):
         # 2段階動作
         #--------------------------------------
 
-        pwm.to_angle(0, 60)  
+        self.pwm.to_angle(0, 60)
         time.sleep(0.004)
-        pwm.to_angle(6, -30)  
+        self.pwm.to_angle(6, -30)
         time.sleep(0.004)
-        pwm.to_angle(8, 0)  
+        self.pwm.to_angle(8, 0)
         time.sleep(0.004)
 
-        pwm.to_angle(2, 0)  
+        self.pwm.to_angle(2, 0)
         time.sleep(0.004)
-        pwm.to_angle(4, -30)  
+        self.pwm.to_angle(4, -30)
         time.sleep(0.004)
-        pwm.to_angle(10, 60)  
+        self.pwm.to_angle(10, 60)
         time.sleep(0.004)
 
         time.sleep(0.1)
@@ -179,18 +180,18 @@ class Hexapod2axis(object):
         # 3段階動作
         #--------------------------------------
 
-        pwm.to_angle(1, leftn)  
+        self.pwm.to_angle(1, leftn)
         time.sleep(0.004)
-        pwm.to_angle(7, rightn)  
+        self.pwm.to_angle(7, rightn)
         time.sleep(0.004)
-        pwm.to_angle(9, leftn)  
+        self.pwm.to_angle(9, leftn) 
         time.sleep(0.004)
 
-        pwm.to_angle(3, rightup)  
+        self.pwm.to_angle(3, rightup)
         time.sleep(0.004)
-        pwm.to_angle(5, leftup)  
+        self.pwm.to_angle(5, leftup)
         time.sleep(0.004)
-        pwm.to_angle(11, rightup)  
+        self.pwm.to_angle(11, rightup)
         time.sleep(0.004)
 
         time.sleep(0.1)
@@ -198,18 +199,18 @@ class Hexapod2axis(object):
         #--------------------------------------
         # 4段階動作
         #--------------------------------------
-        pwm.to_angle(0, 0)  
+        self.pwm.to_angle(0, 0)
         time.sleep(0.004)
-        pwm.to_angle(6, 30)  
+        self.pwm.to_angle(6, 30)
         time.sleep(0.004)
-        pwm.to_angle(8, -60)  
+        self.pwm.to_angle(8, -60)
         time.sleep(0.004)
 
-        pwm.to_angle(2, -60)  
+        self.pwm.to_angle(2, -60)
         time.sleep(0.004)
-        pwm.to_angle(4, 30)  
+        self.pwm.to_angle(4, 30)
         time.sleep(0.004)
-        pwm.to_angle(10, 0)  
+        self.pwm.to_angle(10, 0)
         time.sleep(0.004)
 
         time.sleep(0.1)
@@ -220,18 +221,18 @@ class Hexapod2axis(object):
         #---------------------------------------
         # 1段階動作
         #---------------------------------------
-        pwm.to_angle(1, leftup)  
+        self.pwm.to_angle(1, leftup)
         time.sleep(0.004)
-        pwm.to_angle(7, rightup)  
+        self.pwm.to_angle(7, rightup)
         time.sleep(0.004)
-        pwm.to_angle(9, leftup)  
+        self.pwm.to_angle(9, leftup)
         time.sleep(0.004)
 
-        pwm.to_angle(3, rightn)  
+        self.pwm.to_angle(3, rightn)
         time.sleep(0.004)
-        pwm.to_angle(5, leftn)  
+        self.pwm.to_angle(5, leftn)
         time.sleep(0.004)
-        pwm.to_angle(11, rightn)  
+        self.pwm.to_angle(11, rightn)
         time.sleep(0.004)
         
         time.sleep(0.1)
@@ -240,18 +241,18 @@ class Hexapod2axis(object):
         # 2段階動作
         #--------------------------------------
 
-        pwm.to_angle(0, 0)  
+        self.pwm.to_angle(0, 0)
         time.sleep(0.004)
-        pwm.to_angle(6, 30)  
+        self.pwm.to_angle(6, 30)
         time.sleep(0.004)
-        pwm.to_angle(8, -60)  
+        self.pwm.to_angle(8, -60)
         time.sleep(0.004)
 
-        pwm.to_angle(2, -60)  
+        self.pwm.to_angle(2, -60)
         time.sleep(0.004)
-        pwm.to_angle(4, 30)  
+        self.pwm.to_angle(4, 30)
         time.sleep(0.004)
-        pwm.to_angle(10, 0)  
+        self.pwm.to_angle(10, 0)
         time.sleep(0.004)
 
         time.sleep(0.1)
@@ -260,18 +261,18 @@ class Hexapod2axis(object):
         # 3段階動作
         #--------------------------------------
 
-        pwm.to_angle(1, leftn)  
+        self.pwm.to_angle(1, leftn)
         time.sleep(0.004)
-        pwm.to_angle(7, rightn)  
+        self.pwm.to_angle(7, rightn)
         time.sleep(0.004)
-        pwm.to_angle(9, leftn)  
+        self.pwm.to_angle(9, leftn)
         time.sleep(0.004)
 
-        pwm.to_angle(3, rightup)  
+        self.pwm.to_angle(3, rightup)
         time.sleep(0.004)
-        pwm.to_angle(5, leftup)  
+        self.pwm.to_angle(5, leftup)
         time.sleep(0.004)
-        pwm.to_angle(11, rightup)  
+        self.pwm.to_angle(11, rightup)
         time.sleep(0.004)
 
         time.sleep(0.1)
@@ -279,18 +280,18 @@ class Hexapod2axis(object):
         #--------------------------------------
         # 4段階動作
         #--------------------------------------
-        pwm.to_angle(0, 60)  
+        self.pwm.to_angle(0, 60)
         time.sleep(0.004)
-        pwm.to_angle(6, -30)  
+        self.pwm.to_angle(6, -30)
         time.sleep(0.004)
-        pwm.to_angle(8, 0)  
+        self.pwm.to_angle(8, 0)
         time.sleep(0.004)
 
-        pwm.to_angle(2, 0)  
+        self.pwm.to_angle(2, 0)
         time.sleep(0.004)
-        pwm.to_angle(4, -30)  
+        self.pwm.to_angle(4, -30)
         time.sleep(0.004)
-        pwm.to_angle(10, 60)  
+        self.pwm.to_angle(10, 60)
         time.sleep(0.004)
 
         time.sleep(0.1)
@@ -301,18 +302,18 @@ class Hexapod2axis(object):
         #---------------------------------------
         # 1段階動作
         #---------------------------------------
-        pwm.to_angle(1, leftup)  
+        self.pwm.to_angle(1, leftup)
         time.sleep(0.004)
-        pwm.to_angle(7, rightup)  
+        self.pwm.to_angle(7, rightup)
         time.sleep(0.004)
-        pwm.to_angle(9, leftup)  
+        self.pwm.to_angle(9, leftup)
         time.sleep(0.004)
 
-        pwm.to_angle(3, rightn)  
+        self.pwm.to_angle(3, rightn)
         time.sleep(0.004)
-        pwm.to_angle(5, leftn)  
+        self.pwm.to_angle(5, leftn)
         time.sleep(0.004)
-        pwm.to_angle(11, rightn)  
+        self.pwm.to_angle(11, rightn)
         time.sleep(0.004)
         
         time.sleep(0.1)
@@ -321,18 +322,18 @@ class Hexapod2axis(object):
         # 2段階動作
         #--------------------------------------
 
-        pwm.to_angle(0, 0)  
+        self.pwm.to_angle(0, 0)
         time.sleep(0.004)
-        pwm.to_angle(6, -30)  
+        self.pwm.to_angle(6, -30)
         time.sleep(0.004)
-        pwm.to_angle(8, -60)  
+        self.pwm.to_angle(8, -60)
         time.sleep(0.004)
 
-        pwm.to_angle(2, 60)  
+        self.pwm.to_angle(2, 60)
         time.sleep(0.004)
-        pwm.to_angle(4, 30)  
+        self.pwm.to_angle(4, 30)
         time.sleep(0.004)
-        pwm.to_angle(10, 0)  
+        self.pwm.to_angle(10, 0)
         time.sleep(0.004)
 
         time.sleep(0.1)
@@ -341,18 +342,18 @@ class Hexapod2axis(object):
         # 3段階動作
         #--------------------------------------
 
-        pwm.to_angle(1, leftn)  
+        self.pwm.to_angle(1, leftn)
         time.sleep(0.004)
-        pwm.to_angle(7, rightn)  
+        self.pwm.to_angle(7, rightn)
         time.sleep(0.004)
-        pwm.to_angle(9, leftn)  
+        self.pwm.to_angle(9, leftn)
         time.sleep(0.004)
 
-        pwm.to_angle(3, rightup)  
+        self.pwm.to_angle(3, rightup)
         time.sleep(0.004)
-        pwm.to_angle(5, leftup)  
+        self.pwm.to_angle(5, leftup)
         time.sleep(0.004)
-        pwm.to_angle(11, rightup)  
+        self.pwm.to_angle(11, rightup)
         time.sleep(0.004)
 
         time.sleep(0.1)
@@ -360,18 +361,18 @@ class Hexapod2axis(object):
         #--------------------------------------
         # 4段階動作
         #--------------------------------------
-        pwm.to_angle(0, 60)  
+        self.pwm.to_angle(0, 60)
         time.sleep(0.004)
-        pwm.to_angle(6, 30)  
+        self.pwm.to_angle(6, 30)
         time.sleep(0.004)
-        pwm.to_angle(8, 0)  
+        self.pwm.to_angle(8, 0)
         time.sleep(0.004)
 
-        pwm.to_angle(2, 0)  
+        self.pwm.to_angle(2, 0)
         time.sleep(0.004)
-        pwm.to_angle(4, -30)  
+        self.pwm.to_angle(4, -30)
         time.sleep(0.004)
-        pwm.to_angle(10, -60)  
+        self.pwm.to_angle(10, -60)
         time.sleep(0.004)
 
         time.sleep(0.1)
@@ -381,18 +382,18 @@ class Hexapod2axis(object):
                 #---------------------------------------
         # 1段階動作
         #---------------------------------------
-        pwm.to_angle(1, leftup)  
+        self.pwm.to_angle(1, leftup)
         time.sleep(0.004)
-        pwm.to_angle(7, rightup)  
+        self.pwm.to_angle(7, rightup)
         time.sleep(0.004)
-        pwm.to_angle(9, leftup)  
+        self.pwm.to_angle(9, leftup)
         time.sleep(0.004)
 
-        pwm.to_angle(3, rightn)  
+        self.pwm.to_angle(3, rightn)
         time.sleep(0.004)
-        pwm.to_angle(5, leftn)  
+        self.pwm.to_angle(5, leftn)
         time.sleep(0.004)
-        pwm.to_angle(11, rightn)  
+        self.pwm.to_angle(11, rightn)
         time.sleep(0.004)
         
         time.sleep(0.1)
@@ -400,38 +401,38 @@ class Hexapod2axis(object):
         #--------------------------------------
         # 2段階動作
         #--------------------------------------
-        pwm.to_angle(0, 60)  
+        self.pwm.to_angle(0, 60)
         time.sleep(0.004)
-        pwm.to_angle(6, 30)  
+        self.pwm.to_angle(6, 30)
         time.sleep(0.004)
-        pwm.to_angle(8, 0)  
-        time.sleep(0.004)
-
-        pwm.to_angle(2, 0)  
-        time.sleep(0.004)
-        pwm.to_angle(4, -30)  
-        time.sleep(0.004)
-        pwm.to_angle(10, -60)  
+        self.pwm.to_angle(8, 0)
         time.sleep(0.004)
 
-        time.sleep(0.1)   
+        self.pwm.to_angle(2, 0)
+        time.sleep(0.004)
+        self.pwm.to_angle(4, -30)
+        time.sleep(0.004)
+        self.pwm.to_angle(10, -60)
+        time.sleep(0.004)
+
+        time.sleep(0.1)
  
         #--------------------------------------
         # 3段階動作
         #--------------------------------------
 
-        pwm.to_angle(1, leftn)  
+        self.pwm.to_angle(1, leftn)
         time.sleep(0.004)
-        pwm.to_angle(7, rightn)  
+        self.pwm.to_angle(7, rightn)
         time.sleep(0.004)
-        pwm.to_angle(9, leftn)  
+        self.pwm.to_angle(9, leftn)
         time.sleep(0.004)
 
-        pwm.to_angle(3, rightup)  
+        self.pwm.to_angle(3, rightup)
         time.sleep(0.004)
-        pwm.to_angle(5, leftup)  
+        self.pwm.to_angle(5, leftup)
         time.sleep(0.004)
-        pwm.to_angle(11, rightup)  
+        self.pwm.to_angle(11, rightup)
         time.sleep(0.004)
 
         time.sleep(0.1)
@@ -439,55 +440,55 @@ class Hexapod2axis(object):
         #--------------------------------------
         # 4段階動作
         #--------------------------------------
-        pwm.to_angle(0, 0)  
+        self.pwm.to_angle(0, 0)
         time.sleep(0.004)
-        pwm.to_angle(6, -30)  
+        self.pwm.to_angle(6, -30)
         time.sleep(0.004)
-        pwm.to_angle(8, -60)  
-        time.sleep(0.004)
-
-        pwm.to_angle(2, 60)  
-        time.sleep(0.004)
-        pwm.to_angle(4, 30)  
-        time.sleep(0.004)
-        pwm.to_angle(10, 0)  
+        self.pwm.to_angle(8, -60)
         time.sleep(0.004)
 
-        time.sleep(0.1)     
+        self.pwm.to_angle(2, 60)
+        time.sleep(0.004)
+        self.pwm.to_angle(4, 30)
+        time.sleep(0.004)
+        self.pwm.to_angle(10, 0)
+        time.sleep(0.004)
+
+        time.sleep(0.1) 
 
 
     def on_stop(self):
         print('ストップ')
         # TODO : 処理
-
+i
     def on_neutral(self):
         print('ニュートラルポジション')
-        pwm.to_angle(1, leftn)  
+        self.pwm.to_angle(1, leftn)
         time.sleep(0.004)
-        pwm.to_angle(7, rightn)  
+        self.pwm.to_angle(7, rightn)
         time.sleep(0.004)
-        pwm.to_angle(9, leftn)  
-        time.sleep(0.004)
-
-        pwm.to_angle(3, rightn)  
-        time.sleep(0.004)
-        pwm.to_angle(5, leftn)  
-        time.sleep(0.004)
-        pwm.to_angle(11, rightn)  
+        self.pwm.to_angle(9, leftn)
         time.sleep(0.004)
 
-        pwm.to_angle(0, 30)  
+        self.pwm.to_angle(3, rightn)
         time.sleep(0.004)
-        pwm.to_angle(6, 0)  
+        self.pwm.to_angle(5, leftn)
         time.sleep(0.004)
-        pwm.to_angle(8, -30)  
+        self.pwm.to_angle(11, rightn)
         time.sleep(0.004)
 
-        pwm.to_angle(2, -30)  
+        self.pwm.to_angle(0, 30)
         time.sleep(0.004)
-        pwm.to_angle(4, 0)
+        self.pwm.to_angle(6, 0)
         time.sleep(0.004)
-        pwm.to_angle(10, 30)  
+        self.pwm.to_angle(8, -30)
+        time.sleep(0.004)
+
+        self.pwm.to_angle(2, -30)
+        time.sleep(0.004)
+        self.pwm.to_angle(4, 0)
+        time.sleep(0.004)
+        self.pwm.to_angle(10, 30)
         time.sleep(0.004)
 
         time.sleep(0.2)
