@@ -13,12 +13,12 @@ RaspberryPiでのサーボ制御用
 https://github.com/adafruit/Adafruit_Python_PCA9685
 
 ```
-pip install adafruit-pca9685
+sudo pip install adafruit-pca9685
 ```
 
 ### i2cを使用する場合
 ```
-sudo apt install i2c-tools python-smbus
+sudo apt-get install i2c-tools python-smbus
 ```
 
 ## Pythonをバージョン管理する場合
@@ -56,9 +56,9 @@ pipがない場合
 $ curl https://raw.githubusercontent.com/kennethreitz/pipenv/master/get-pipenv.py | python
 ```
 
-環境の作成 
-```c
+環境の作成
+```
 cd (開発ディレクトリ)
-//pipenv install
+pipenv install python--
 pipenv run hexapod
 ```
