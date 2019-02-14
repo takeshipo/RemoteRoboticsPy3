@@ -14,6 +14,7 @@ def control_hexapod():
 
     hexapod = Hexapod2axis()
     hexapod.on_neutral()
+    hexapod.start_control()
 
     try:
         while True:
@@ -23,7 +24,7 @@ def control_hexapod():
             if data == CMD_QUIT:
                 quit()
 
-            hexapod.control(data)
+            hexapod.state = data
 
     finally:
         connection.close()
@@ -35,5 +36,5 @@ def test_hexapod():
 
 
 if __name__ == '__main__':
-    #control_hexapod()
+    # control_hexapod()
     test_hexapod()
