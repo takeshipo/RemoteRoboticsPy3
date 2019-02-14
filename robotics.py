@@ -20,9 +20,8 @@ class Robotics(object):
         self.state = 0
         self.previous_state = -1
 
-    def control(self, state):
-        self.state = state
-        func = self.on_neutral
+
+    def start_control(self):
 
         if self.state == State.ON_FORWARD:
             func = self.on_forward
@@ -44,7 +43,8 @@ class Robotics(object):
 
         self.previous_state = self.state
 
-        self.executor.submit(fn=func)
+        self.executor.submit(fn=self.start_control)
+
 
     def on_forward(self):
         print("前進")
