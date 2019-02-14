@@ -14,7 +14,7 @@ class ServoPwmConfigData:
     # 値はすべてマイクロ秒で指定する
 
     # PWMの一周期。
-    pulse_period: int = 20000
+    pulse_period: int = 10000
 
     # サーボの最大角（可動域）
     range_angle: int = 180

@@ -22,28 +22,29 @@ class Robotics(object):
 
     def control(self, state):
         self.state = state
+        func = self.on_neutral
 
         if self.state == State.ON_FORWARD:
-            self.on_forward()
+            func = self.on_forward
 
         elif self.state == State.ON_RIGHT_TURN:
-            self.on_right_turn()
+            func = self.on_right_turn
 
         elif self.state == State.ON_LEFT_TURN:
-            self.on_left_turn()
+            func = self.on_left_turn
 
         elif self.state == State.ON_BACKWARD:
-            self.on_backward()
+            func = self.on_backward
 
         elif self.state == State.ON_STOP and self.previous_state != State.ON_STOP:
-            self.on_stop()
+            func = self.on_stop
 
         elif self.state == State.ON_NEWTRAL and self.previous_state != State.ON_NEWTRAL:
-            self.on_neutral()
+            func = self.on_neutral
 
         self.previous_state = self.state
 
-        self.executor.submit(fn=self.control)
+        self.executor.submit(fn=func)
 
     def on_forward(self):
         print("前進")
