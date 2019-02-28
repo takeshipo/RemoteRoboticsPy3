@@ -14,7 +14,7 @@ class ServoPwmConfigData:
     # 値はすべてマイクロ秒で指定する
 
     # PWMの一周期。
-    pulse_period: int = 10000
+    pulse_period: int = 20000
 
     # サーボの最大角（可動域）
     range_angle: int = 180
@@ -52,26 +52,25 @@ def get_KRS2552RHV():
 # ライブラリの利用をサポートするクラス
 class SupportServoDriver(object):
 
-    def __init__(self, config_data, address=0x40):
+    def __init__(self, freq=20000, address=0x40):
         self.executor = concurrent.futures.ThreadPoolExecutor(max_workers=1)
 
-        self.config_data = config_data
         self.pwm = Adafruit_PCA9685.PCA9685(address)  # ライブラリ(PCA9685)をインスタンス化
-        self.pwm.set_pwm_freq(1000000 / self.config_data.pulse_period)  # デフォルトのままなら50HZ
+        self.pwm.set_pwm_freq(1000000 / freq)  # デフォルトのままなら50HZ
 
-    def to_angle(self, channel, angle):
-        pulse_value = self.calc_pulse(angle)
+    def to_angle(self, channel, config_data, angle):
+        pulse_value = self.calc_pulse(angle, config_data)
         self.executor.submit(fn=self.pwm.set_pwm(channel, 0, pulse_value))
 
     # 角度を受け取ってPCA9685に対応した値を算出する
-    def calc_pulse(self, angle):
+    def calc_pulse(self, angle, config_data):
         # パルス幅よりDuty比を求める。
-        min_duty = self.config_data.servo_min / self.config_data.pulse_period
-        max_duty = self.config_data.servo_max / self.config_data.pulse_period
+        min_duty = config_data.servo_min / config_data.pulse_period
+        max_duty = config_data.servo_max / config_data.pulse_period
 
         # 全体に対して何％の角度か求める。例えば、フルが180°に対しての60°であれば33%。
         # par_angle = (angle / self.range_angle)  # 中心を90°として角度を指定する場合
-        par_angle = (angle / self.config_data.range_angle) + 0.5  # 中心を0°として角度を指定する場合
+        par_angle = (angle / config_data.range_angle) + 0.5  # 中心を0°として角度を指定する場合
 
         # 角度からDuty比を求める
         duty = ((max_duty - min_duty) * par_angle) + min_duty
