@@ -16,21 +16,21 @@ right_t_up = 80
 
 
 class Arm2axis:
-    def __init__(self, pitch, roll):
+    def __init__(self, yaw, pitch):
+        self.yaw_type = yaw["config_data"]
+        self.yaw_channel = yaw["channel"]
+        self.yaw_driver = yaw["driver"]
+
         self.pitch_type = pitch["config_data"]
         self.pitch_channel = pitch["channel"]
         self.pitch_driver = pitch["driver"]
 
-        self.roll_type = roll["config_data"]
-        self.roll_channel = roll["channel"]
-        self.roll_driver = roll["driver"]
+    def set_yaw_angle(self, angle):
+        self.yaw_driver.to_angle(self.yaw_type, self.yaw_channel, angle)
+        return self
 
     def set_pitch_angle(self, angle):
         self.pitch_driver.to_angle(self.pitch_type, self.pitch_channel, angle)
-        return self
-
-    def set_roll_angle(self, angle):
-        self.roll_driver.to_angle(self.roll_type, self.roll_channel, angle)
         return self
 
 
@@ -41,28 +41,28 @@ class Hexapod2axis(Robotics):
         self.driver = SupportServoDriver(address=0x40)
 
         self.arm1 = Arm2axis(
-            pitch={"channel": 2, "driver": self.driver, "config_data": get_SG90()},
-            roll={"channel": 2, "driver": self.driver, "config_data": get_SG90()})
+            yaw={"config_data": get_SG90(), "driver": self.driver, "channel": 1},
+            pitch={"config_data": get_SG90(), "driver": self.driver, "channel": 1})
 
         self.arm2 = Arm2axis(
-            pitch={"channel": 2, "driver": self.driver, "config_data": get_SG90()},
-            roll={"channel": 2, "driver": self.driver, "config_data": get_SG90()})
+            yaw={"config_data": get_SG90(), "driver": self.driver, "channel": 1},
+            pitch={"config_data": get_SG90(), "driver": self.driver, "channel": 1})
 
         self.arm3 = Arm2axis(
-            pitch={"channel": 2, "driver": self.driver, "config_data": get_SG90()},
-            roll={"channel": 2, "driver": self.driver, "config_data": get_SG90()})
+            yaw={"config_data": get_SG90(), "driver": self.driver, "channel": 1},
+            pitch={"config_data": get_SG90(), "driver": self.driver, "channel": 1})
 
         self.arm4 = Arm2axis(
-            pitch={"channel": 2, "driver": self.driver, "config_data": get_SG90()},
-            roll={"channel": 2, "driver": self.driver, "config_data": get_SG90()})
+            yaw={"config_data": get_SG90(), "driver": self.driver, "channel": 1},
+            pitch={"config_data": get_SG90(), "driver": self.driver, "channel": 1})
 
         self.arm5 = Arm2axis(
-            pitch={"channel": 2, "driver": self.driver, "config_data": get_SG90()},
-            roll={"channel": 2, "driver": self.driver, "config_data": get_SG90()})
+            yaw={"config_data": get_SG90(), "driver": self.driver, "channel": 1},
+            pitch={"config_data": get_SG90(), "driver": self.driver, "channel": 1})
 
         self.arm6 = Arm2axis(
-            pitch={"channel": 2, "driver": self.driver, "config_data": get_SG90()},
-            roll={"channel": 2, "driver": self.driver, "config_data": get_SG90()})
+            yaw={"config_data": get_SG90(), "driver": self.driver, "channel": 1},
+            pitch={"config_data": get_SG90(), "driver": self.driver, "channel": 1})
 
     def on_forward(self):
         print("前進")
