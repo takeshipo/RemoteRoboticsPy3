@@ -58,7 +58,7 @@ class SupportServoDriver(object):
         self.pwm = Adafruit_PCA9685.PCA9685(address)  # ライブラリ(PCA9685)をインスタンス化
         self.pwm.set_pwm_freq(1000000 / freq)  # デフォルトのままなら50HZ
 
-    def to_angle(self, channel, config_data, angle):
+    def to_angle(self, config_data, channel, angle):
         pulse_value = self.calc_pulse(angle, config_data)
         self.executor.submit(fn=self.pwm.set_pwm(channel, 0, pulse_value))
 

@@ -14,473 +14,55 @@ rightn = -30  # 右脚高さの初期値
 rightup = 40  # 右脚の上げる高さ
 right_t_up = 80
 
-class Hexapod3axis(Robotics):
 
-    def __init__(self):
-        super().__init__()
+class Arm2axis:
+    def __init__(self, pitch, roll):
+        self.pitch_type = pitch["config_data"]
+        self.pitch_channel = pitch["channel"]
+        self.pitch_driver = pitch["driver"]
 
-        self.driver1 = SupportServoDriver(config_data=get_MG92B(), address=0x40)
-        self.driver2 = SupportServoDriver(config_data=get_MG92B(), address=0x41)
+        self.roll_type = roll["config_data"]
+        self.roll_channel = roll["channel"]
+        self.roll_driver = roll["driver"]
 
-    def on_forward(self):
-        print("前進")
-        # --------------------------------
-        # 1段階目
-        # --------------------------------
-        self.driver1.to_angle(2, leftup)  # 左脚高さ初期値
-        time.sleep(0.004)
-        self.driver1.to_angle(5, rightup)  # 右脚高さ初期値
-        time.sleep(0.004)
-        self.driver1.to_angle(8, leftup)  # 左脚高さ初期値
-        time.sleep(0.004)
+    def set_pitch_angle(self, angle):
+        self.pitch_driver.to_angle(self.pitch_type, self.pitch_channel, angle)
+        return self
 
-        self.driver2.to_angle(2, rightn)  # 左脚高さ初期値
-        time.sleep(0.004)
-        self.driver2.to_angle(5, leftn)  # 右脚高さ初期値
-        time.sleep(0.004)
-        self.driver2.to_angle(8, rightn)  # 左脚高さ初期値
-        time.sleep(0.004)
-
-        time.sleep(0.1)
-
-        # ---------------------------------
-        # 2段階目
-        # ---------------------------------
-        self.driver1.to_angle(0, -30)  # 右中脚を前に動かす
-        time.sleep(0.004)
-        self.driver1.to_angle(1, -5)  # 足の角度を前方向へ
-        time.sleep(0.004)
-        self.driver1.to_angle(3, 30)  # 右前脚を前に動かす
-        time.sleep(0.004)
-        self.driver1.to_angle(4, 5)  # 足の角度を前方向へ
-        time.sleep(0.004)
-        self.driver1.to_angle(6, -30)  # 右中脚を前に動かす
-        time.sleep(0.004)
-        self.driver1.to_angle(7, -5)  # 足の角度を前方向へ
-        time.sleep(0.004)
-
-        self.driver2.to_angle(0, -30)  # 右中脚を初期設定
-        time.sleep(0.004)
-        self.driver2.to_angle(1, -5)  # 右前脚を初期設定
-        time.sleep(0.004)
-        self.driver2.to_angle(3, 30)  # 右中脚を初期設定
-        time.sleep(0.004)
-        self.driver2.to_angle(4, 5)  # 右中脚を初期設定
-        time.sleep(0.004)
-        self.driver2.to_angle(6, -30)  # 右中脚を初期設定
-        time.sleep(0.004)
-        self.driver2.to_angle(7, -5)  # 右中脚を初期設定
-        time.sleep(0.004)
-
-        time.sleep(0.1)
-
-        # -------------------------------
-        # 3段階目
-        # -------------------------------
-        self.driver1.to_angle(2, leftn)  # 左脚高さ初期値
-        time.sleep(0.004)
-        self.driver1.to_angle(5, rightn)  # 右脚高さ初期値
-        time.sleep(0.004)
-        self.driver1.to_angle(8, leftn)  # 左脚高さ初期値
-        time.sleep(0.004)
-
-        self.driver2.to_angle(2, rightup)  # 左脚高さ初期値
-        time.sleep(0.004)
-        self.driver2.to_angle(5, leftup)  # 右脚高さ初期値
-        time.sleep(0.004)
-        self.driver2.to_angle(8, rightup)  # 左脚高さ初期値
-        time.sleep(0.004)
-
-        time.sleep(0.1)
-
-        # ------------------------------------
-        # 4段階目
-        # ------------------------------------
-        self.driver1.to_angle(0, 30)  # 右中脚を前に動かす
-        time.sleep(0.004)
-        self.driver1.to_angle(1, 5)  # 足の角度を前方向へ
-        time.sleep(0.004)
-        self.driver1.to_angle(3, -30)  # 右前脚を前に動かす
-        time.sleep(0.004)
-        self.driver1.to_angle(4, -5)  # 足の角度を前方向へ
-        time.sleep(0.004)
-        self.driver1.to_angle(6, 30)  # 右中脚を前に動かす
-        time.sleep(0.004)
-        self.driver1.to_angle(7, 5)  # 足の角度を前方向へ
-        time.sleep(0.004)
-
-        self.driver2.to_angle(0, 30)  # 右中脚を初期設定
-        time.sleep(0.004)
-        self.driver2.to_angle(1, 5)  # 右前脚を初期設定
-        time.sleep(0.004)
-        self.driver2.to_angle(3, -30)  # 右中脚を初期設定
-        time.sleep(0.004)
-        self.driver2.to_angle(4, -5)  # 右中脚を初期設定
-        time.sleep(0.004)
-        self.driver2.to_angle(6, 30)  # 右中脚を初期設定
-        time.sleep(0.004)
-        self.driver2.to_angle(7, 5)  # 右中脚を初期設定
-        time.sleep(0.004)
-
-        time.sleep(0.1)
-
-    def on_backward(self):
-        print("後進")
-        # ----------------------------------------
-        # 1段階目
-        # ----------------------------------------
-        self.driver1.to_angle(2, leftup)  # 左脚高さ初期値
-        time.sleep(0.004)
-        self.driver1.to_angle(5, rightup)  # 右脚高さ初期値
-        time.sleep(0.004)
-        self.driver1.to_angle(8, leftup)  # 左脚高さ初期値
-        time.sleep(0.004)
-
-        self.driver2.to_angle(2, rightn)  # 左脚高さ初期値
-        time.sleep(0.004)
-        self.driver2.to_angle(5, leftn)  # 右脚高さ初期値
-        time.sleep(0.004)
-        self.driver2.to_angle(8, rightn)  # 左脚高さ初期値
-        time.sleep(0.004)
-
-        time.sleep(0.1)
-
-        # ---------------------------------
-        # 2段階目
-        # ---------------------------------
-        self.driver1.to_angle(0, 30)  # 右中脚を前に動かす
-        time.sleep(0.004)
-        self.driver1.to_angle(1, 5)  # 足の角度を前方向へ
-        time.sleep(0.004)
-        self.driver1.to_angle(3, -30)  # 右前脚を前に動かす
-        time.sleep(0.004)
-        self.driver1.to_angle(4, -5)  # 足の角度を前方向へ
-        time.sleep(0.004)
-        self.driver1.to_angle(6, 30)  # 右中脚を前に動かす
-        time.sleep(0.004)
-        self.driver1.to_angle(7, 5)  # 足の角度を前方向へ
-        time.sleep(0.004)
-
-        self.driver2.to_angle(0, 30)  # 右中脚を初期設定
-        time.sleep(0.004)
-        self.driver2.to_angle(1, 5)  # 右前脚を初期設定
-        time.sleep(0.004)
-        self.driver2.to_angle(3, -30)  # 右中脚を初期設定
-        time.sleep(0.004)
-        self.driver2.to_angle(4, -5)  # 右中脚を初期設定
-        time.sleep(0.004)
-        self.driver2.to_angle(6, 30)  # 右中脚を初期設定
-        time.sleep(0.004)
-        self.driver2.to_angle(7, 5)  # 右中脚を初期設定
-        time.sleep(0.004)
-
-        time.sleep(0.1)
-
-        # -------------------------------
-        # 3段階目
-        # -------------------------------
-        self.driver1.to_angle(2, leftn)  # 左脚高さ初期値
-        time.sleep(0.004)
-        self.driver1.to_angle(5, rightn)  # 右脚高さ初期値
-        time.sleep(0.004)
-        self.driver1.to_angle(8, leftn)  # 左脚高さ初期値
-        time.sleep(0.004)
-
-        self.driver2.to_angle(2, rightup)  # 左脚高さ初期値
-        time.sleep(0.004)
-        self.driver2.to_angle(5, leftup)  # 右脚高さ初期値
-        time.sleep(0.004)
-        self.driver2.to_angle(8, rightup)  # 左脚高さ初期値
-        time.sleep(0.004)
-
-        time.sleep(0.1)
-
-        # ------------------------------------
-        # 4段階目
-        # ------------------------------------
-        self.driver1.to_angle(0, -30)  # 右中脚を前に動かす
-        time.sleep(0.004)
-        self.driver1.to_angle(1, -5)  # 足の角度を前方向へ
-        time.sleep(0.004)
-        self.driver1.to_angle(3, 30)  # 右前脚を前に動かす
-        time.sleep(0.004)
-        self.driver1.to_angle(4, 5)  # 足の角度を前方向へ
-        time.sleep(0.004)
-        self.driver1.to_angle(6, -30)  # 右中脚を前に動かす
-        time.sleep(0.004)
-        self.driver1.to_angle(7, -5)  # 足の角度を前方向へ
-        time.sleep(0.004)
-
-        self.driver2.to_angle(0, -30)  # 右中脚を初期設定
-        time.sleep(0.004)
-        self.driver2.to_angle(1, -5)  # 右前脚を初期設定
-        time.sleep(0.004)
-        self.driver2.to_angle(3, 30)  # 右中脚を初期設定
-        time.sleep(0.004)
-        self.driver2.to_angle(4, 5)  # 右中脚を初期設定
-        time.sleep(0.004)
-        self.driver2.to_angle(6, -30)  # 右中脚を初期設定
-        time.sleep(0.004)
-        self.driver2.to_angle(7, -5)  # 右中脚を初期設定
-        time.sleep(0.004)
-
-        time.sleep(0.1)
-
-    def on_left_turn(self):
-        print("左旋回")
-        # ----------------------------------------
-        # 1段階目
-        # ----------------------------------------
-        self.driver1.to_angle(2, left_t_up)  # 左脚高さ初期値
-        time.sleep(0.004)
-        self.driver1.to_angle(5, right_t_up)  # 右脚高さ初期値
-        time.sleep(0.004)
-        self.driver1.to_angle(8, left_t_up)  # 左脚高さ初期値
-        time.sleep(0.004)
-
-        self.driver2.to_angle(2, rightn)  # 左脚高さ初期値
-        time.sleep(0.004)
-        self.driver2.to_angle(5, leftn)  # 右脚高さ初期値
-        time.sleep(0.004)
-        self.driver2.to_angle(8, rightn)  # 左脚高さ初期値
-        time.sleep(0.004)
-
-        time.sleep(0.1)
-
-        # ---------------------------------
-        # 2段階目
-        # ---------------------------------
-        self.driver1.to_angle(0, 30)  # 右中脚を前に動かす
-        time.sleep(0.004)
-        self.driver1.to_angle(1, 5)  # 足の角度を前方向へ
-        time.sleep(0.004)
-        self.driver1.to_angle(3, 30)  # 右前脚を前に動かす
-        time.sleep(0.004)
-        self.driver1.to_angle(4, 5)  # 足の角度を前方向へ
-        time.sleep(0.004)
-        self.driver1.to_angle(6, 30)  # 右中脚を前に動かす
-        time.sleep(0.004)
-        self.driver1.to_angle(7, 5)  # 足の角度を前方向へ
-        time.sleep(0.004)
-
-        self.driver2.to_angle(0, 30)  # 右中脚を初期設定
-        time.sleep(0.004)
-        self.driver2.to_angle(1, 5)  # 右前脚を初期設定
-        time.sleep(0.004)
-        self.driver2.to_angle(3, 30)  # 右中脚を初期設定
-        time.sleep(0.004)
-        self.driver2.to_angle(4, 5)  # 右中脚を初期設定
-        time.sleep(0.004)
-        self.driver2.to_angle(6, 30)  # 右中脚を初期設定
-        time.sleep(0.004)
-        self.driver2.to_angle(7, 5)  # 右中脚を初期設定
-        time.sleep(0.004)
-
-        time.sleep(0.1)
-
-        # -------------------------------
-        # 3段階目
-        # -------------------------------
-        self.driver1.to_angle(2, leftn)  # 左脚高さ初期値
-        time.sleep(0.004)
-        self.driver1.to_angle(5, rightn)  # 右脚高さ初期値
-        time.sleep(0.004)
-        self.driver1.to_angle(8, leftn)  # 左脚高さ初期値
-        time.sleep(0.004)
-
-        self.driver1.to_angle(2, right_t_up)  # 左脚高さ初期値
-        time.sleep(0.004)
-        self.driver1.to_angle(5, left_t_up)  # 右脚高さ初期値
-        time.sleep(0.004)
-        self.driver1.to_angle(8, right_t_up)  # 左脚高さ初期値
-        time.sleep(0.004)
-
-        time.sleep(0.1)
-
-        # ------------------------------------
-        # 4段階目
-        # ------------------------------------
-        self.driver1.to_angle(0, -30)  # 右中脚を前に動かす
-        time.sleep(0.004)
-        self.driver1.to_angle(1, -5)  # 足の角度を前方向へ
-        time.sleep(0.004)
-        self.driver1.to_angle(3, -30)  # 右前脚を前に動かす
-        time.sleep(0.004)
-        self.driver1.to_angle(4, -5)  # 足の角度を前方向へ
-        time.sleep(0.004)
-        self.driver1.to_angle(6, -30)  # 右中脚を前に動かす
-        time.sleep(0.004)
-        self.driver1.to_angle(7, -5)  # 足の角度を前方向へ
-        time.sleep(0.004)
-
-        self.driver2.to_angle(0, -30)  # 右中脚を初期設定
-        time.sleep(0.004)
-        self.driver2.to_angle(1, -5)  # 右前脚を初期設定
-        time.sleep(0.004)
-        self.driver2.to_angle(3, -30)  # 右中脚を初期設定
-        time.sleep(0.004)
-        self.driver2.to_angle(4, -5)  # 右中脚を初期設定
-        time.sleep(0.004)
-        self.driver2.to_angle(6, -30)  # 右中脚を初期設定
-        time.sleep(0.004)
-        self.driver2.to_angle(7, -5)  # 右中脚を初期設定
-        time.sleep(0.004)
-
-        time.sleep(0.1)
-    def on_right_turn(self):
-        print("右旋回")
-        # ----------------------------------------
-        # 1段階目
-        # ----------------------------------------
-        self.driver1.to_angle(2, left_t_up)  # 左脚高さ初期値
-        time.sleep(0.004)
-        self.driver1.to_angle(5, right_t_up)  # 右脚高さ初期値
-        time.sleep(0.004)
-        self.driver1.to_angle(8, left_t_up)  # 左脚高さ初期値
-        time.sleep(0.004)
-
-        self.driver2.to_angle(2, rightn)  # 左脚高さ初期値
-        time.sleep(0.004)
-        self.driver2.to_angle(5, leftn)  # 右脚高さ初期値
-        time.sleep(0.004)
-        self.driver2.to_angle(8, rightn)  # 左脚高さ初期値
-        time.sleep(0.004)
-
-        time.sleep(0.1)
-
-        # ------------------------------------
-        # 2段階目
-        # ------------------------------------
-        self.driver1.to_angle(0, -30)  # 右中脚を前に動かす
-        time.sleep(0.004)
-        self.driver1.to_angle(1, -5)  # 足の角度を前方向へ
-        time.sleep(0.004)
-        self.driver1.to_angle(3, -30)  # 右前脚を前に動かす
-        time.sleep(0.004)
-        self.driver1.to_angle(4, -5)  # 足の角度を前方向へ
-        time.sleep(0.004)
-        self.driver1.to_angle(6, -30)  # 右中脚を前に動かす
-        time.sleep(0.004)
-        self.driver1.to_angle(7, -5)  # 足の角度を前方向へ
-        time.sleep(0.004)
-
-        self.driver2.to_angle(0, -30)  # 右中脚を初期設定
-        time.sleep(0.004)
-        self.driver2.to_angle(1, -5)  # 右前脚を初期設定
-        time.sleep(0.004)
-        self.driver2.to_angle(3, -30)  # 右中脚を初期設定
-        time.sleep(0.004)
-        self.driver2.to_angle(4, -5)  # 右中脚を初期設定
-        time.sleep(0.004)
-        self.driver2.to_angle(6, -30)  # 右中脚を初期設定
-        time.sleep(0.004)
-        self.driver2.to_angle(7, -5)  # 右中脚を初期設定
-        time.sleep(0.004)
-
-        time.sleep(0.1)
-
-        # -------------------------------
-        # 3段階目
-        # -------------------------------
-        self.driver1.to_angle(2, leftn)  # 左脚高さ初期値
-        time.sleep(0.004)
-        self.driver1.to_angle(5, rightn)  # 右脚高さ初期値
-        time.sleep(0.004)
-        self.driver1.to_angle(8, leftn)  # 左脚高さ初期値
-        time.sleep(0.004)
-
-        self.driver2.to_angle(2, right_t_up)  # 左脚高さ初期値
-        time.sleep(0.004)
-        self.driver2.to_angle(5, left_t_up)  # 右脚高さ初期値
-        time.sleep(0.004)
-        self.driver2.to_angle(8, right_t_up)  # 左脚高さ初期値
-        time.sleep(0.004)
-
-        time.sleep(0.1)
-
-        # ---------------------------------
-        # 2段階目
-        # ---------------------------------
-        self.driver1.to_angle(0, 30)  # 右中脚を前に動かす
-        time.sleep(0.004)
-        self.driver1.to_angle(1, 5)  # 足の角度を前方向へ
-        time.sleep(0.004)
-        self.driver1.to_angle(3, 30)  # 右前脚を前に動かす
-        time.sleep(0.004)
-        self.driver1.to_angle(4, 5)  # 足の角度を前方向へ
-        time.sleep(0.004)
-        self.driver1.to_angle(6, 30)  # 右中脚を前に動かす
-        time.sleep(0.004)
-        self.driver1.to_angle(7, 5)  # 足の角度を前方向へ
-        time.sleep(0.004)
-
-        self.driver2.to_angle(0, 30)  # 右中脚を初期設定
-        time.sleep(0.004)
-        self.driver2.to_angle(1, 5)  # 右前脚を初期設定
-        time.sleep(0.004)
-        self.driver2.to_angle(3, 30)  # 右中脚を初期設定
-        time.sleep(0.004)
-        self.driver2.to_angle(4, 5)  # 右中脚を初期設定
-        time.sleep(0.004)
-        self.driver2.to_angle(6, 30)  # 右中脚を初期設定
-        time.sleep(0.004)
-        self.driver2.to_angle(7, 5)  # 右中脚を初期設定
-        time.sleep(0.004)
-
-        time.sleep(0.1)
-    def on_stop(self):
-        print('ストップ')
-
-    def on_neutral(self):
-        print('ニュートラルポジション')
-        self.driver1.to_angle(2, leftn)  # 左脚高さ初期値
-        time.sleep(0.004)
-        self.driver1.to_angle(5, rightn)  # 右脚高さ初期値
-        time.sleep(0.004)
-        self.driver1.to_angle(8, leftn)  # 左脚高さ初期値
-        time.sleep(0.004)
-
-        self.driver1.to_angle(0, 0)  # 右中脚を前に動かす
-        time.sleep(0.004)
-        self.driver1.to_angle(1, 0)  # 右前脚を前に動かす
-        time.sleep(0.004)
-        self.driver1.to_angle(3, 0)  # 右中脚を前に動かす
-        time.sleep(0.004)
-        self.driver1.to_angle(4, 0)  # 右中脚を前に動かす
-        time.sleep(0.004)
-        self.driver1.to_angle(6, 0)  # 右前脚を前に動かす
-        time.sleep(0.004)
-        self.driver1.to_angle(7, 0)  # 右中脚を前に動かす
-        time.sleep(0.004)
-
-        self.driver2.to_angle(2, rightn)  # 左脚高さ初期値
-        time.sleep(0.004)
-        self.driver2.to_angle(5, leftn)  # 右脚高さ初期値sudo
-        time.sleep(0.004)
-        self.driver2.to_angle(8, rightn)  # 左脚高さ初期値
-        time.sleep(0.004)
-
-        self.driver2.to_angle(0, 0)  # 右中脚を前に動かす
-        time.sleep(0.004)
-        self.driver2.to_angle(1, 0)  # 右前脚を前に動かす
-        time.sleep(0.004)
-        self.driver2.to_angle(3, 0)  # 右中脚を前に動かす
-        time.sleep(0.004)
-        self.driver2.to_angle(4, 0)  # 右中脚を前に動かす
-        time.sleep(0.004)
-        self.driver2.to_angle(6, 0)  # 右前脚を前に動かす
-        time.sleep(0.004)
-        self.driver2.to_angle(7, 0)  # 右中脚を前に動かす
-        time.sleep(0.004)
-
-        time.sleep(0.1)
+    def set_roll_angle(self, angle):
+        self.roll_driver.to_angle(self.roll_type, self.roll_channel, angle)
+        return self
 
 
 class Hexapod2axis(Robotics):
 
     def __init__(self):
         super().__init__()
-        self.driver = SupportServoDriver(config_data=get_MG92B(), address=0x40)
+        self.driver = SupportServoDriver(address=0x40)
+
+        self.arm1 = Arm2axis(
+            pitch={"channel": 2, "driver": self.driver, "config_data": get_SG90()},
+            roll={"channel": 2, "driver": self.driver, "config_data": get_SG90()})
+
+        self.arm2 = Arm2axis(
+            pitch={"channel": 2, "driver": self.driver, "config_data": get_SG90()},
+            roll={"channel": 2, "driver": self.driver, "config_data": get_SG90()})
+
+        self.arm3 = Arm2axis(
+            pitch={"channel": 2, "driver": self.driver, "config_data": get_SG90()},
+            roll={"channel": 2, "driver": self.driver, "config_data": get_SG90()})
+
+        self.arm4 = Arm2axis(
+            pitch={"channel": 2, "driver": self.driver, "config_data": get_SG90()},
+            roll={"channel": 2, "driver": self.driver, "config_data": get_SG90()})
+
+        self.arm5 = Arm2axis(
+            pitch={"channel": 2, "driver": self.driver, "config_data": get_SG90()},
+            roll={"channel": 2, "driver": self.driver, "config_data": get_SG90()})
+
+        self.arm6 = Arm2axis(
+            pitch={"channel": 2, "driver": self.driver, "config_data": get_SG90()},
+            roll={"channel": 2, "driver": self.driver, "config_data": get_SG90()})
 
     def on_forward(self):
         print("前進")
@@ -898,3 +480,469 @@ class Hexapod2axis(Robotics):
         time.sleep(0.004)
 
         time.sleep(0.2)
+
+
+'''
+class Hexapod3axis(Robotics):
+
+    def __init__(self):
+        super().__init__()
+
+        self.driver1 = SupportServoDriver(config_data=get_MG92B(), address=0x40)
+        self.driver2 = SupportServoDriver(config_data=get_MG92B(), address=0x41)
+
+    def on_forward(self):
+        print("前進")
+        # --------------------------------
+        # 1段階目
+        # --------------------------------
+        self.driver1.to_angle(2, leftup)  # 左脚高さ初期値
+        time.sleep(0.004)
+        self.driver1.to_angle(5, rightup)  # 右脚高さ初期値
+        time.sleep(0.004)
+        self.driver1.to_angle(8, leftup)  # 左脚高さ初期値
+        time.sleep(0.004)
+
+        self.driver2.to_angle(2, rightn)  # 左脚高さ初期値
+        time.sleep(0.004)
+        self.driver2.to_angle(5, leftn)  # 右脚高さ初期値
+        time.sleep(0.004)
+        self.driver2.to_angle(8, rightn)  # 左脚高さ初期値
+        time.sleep(0.004)
+
+        time.sleep(0.1)
+
+        # ---------------------------------
+        # 2段階目
+        # ---------------------------------
+        self.driver1.to_angle(0, -30)  # 右中脚を前に動かす
+        time.sleep(0.004)
+        self.driver1.to_angle(1, -5)  # 足の角度を前方向へ
+        time.sleep(0.004)
+        self.driver1.to_angle(3, 30)  # 右前脚を前に動かす
+        time.sleep(0.004)
+        self.driver1.to_angle(4, 5)  # 足の角度を前方向へ
+        time.sleep(0.004)
+        self.driver1.to_angle(6, -30)  # 右中脚を前に動かす
+        time.sleep(0.004)
+        self.driver1.to_angle(7, -5)  # 足の角度を前方向へ
+        time.sleep(0.004)
+
+        self.driver2.to_angle(0, -30)  # 右中脚を初期設定
+        time.sleep(0.004)
+        self.driver2.to_angle(1, -5)  # 右前脚を初期設定
+        time.sleep(0.004)
+        self.driver2.to_angle(3, 30)  # 右中脚を初期設定
+        time.sleep(0.004)
+        self.driver2.to_angle(4, 5)  # 右中脚を初期設定
+        time.sleep(0.004)
+        self.driver2.to_angle(6, -30)  # 右中脚を初期設定
+        time.sleep(0.004)
+        self.driver2.to_angle(7, -5)  # 右中脚を初期設定
+        time.sleep(0.004)
+
+        time.sleep(0.1)
+
+        # -------------------------------
+        # 3段階目
+        # -------------------------------
+        self.driver1.to_angle(2, leftn)  # 左脚高さ初期値
+        time.sleep(0.004)
+        self.driver1.to_angle(5, rightn)  # 右脚高さ初期値
+        time.sleep(0.004)
+        self.driver1.to_angle(8, leftn)  # 左脚高さ初期値
+        time.sleep(0.004)
+
+        self.driver2.to_angle(2, rightup)  # 左脚高さ初期値
+        time.sleep(0.004)
+        self.driver2.to_angle(5, leftup)  # 右脚高さ初期値
+        time.sleep(0.004)
+        self.driver2.to_angle(8, rightup)  # 左脚高さ初期値
+        time.sleep(0.004)
+
+        time.sleep(0.1)
+
+        # ------------------------------------
+        # 4段階目
+        # ------------------------------------
+        self.driver1.to_angle(0, 30)  # 右中脚を前に動かす
+        time.sleep(0.004)
+        self.driver1.to_angle(1, 5)  # 足の角度を前方向へ
+        time.sleep(0.004)
+        self.driver1.to_angle(3, -30)  # 右前脚を前に動かす
+        time.sleep(0.004)
+        self.driver1.to_angle(4, -5)  # 足の角度を前方向へ
+        time.sleep(0.004)
+        self.driver1.to_angle(6, 30)  # 右中脚を前に動かす
+        time.sleep(0.004)
+        self.driver1.to_angle(7, 5)  # 足の角度を前方向へ
+        time.sleep(0.004)
+
+        self.driver2.to_angle(0, 30)  # 右中脚を初期設定
+        time.sleep(0.004)
+        self.driver2.to_angle(1, 5)  # 右前脚を初期設定
+        time.sleep(0.004)
+        self.driver2.to_angle(3, -30)  # 右中脚を初期設定
+        time.sleep(0.004)
+        self.driver2.to_angle(4, -5)  # 右中脚を初期設定
+        time.sleep(0.004)
+        self.driver2.to_angle(6, 30)  # 右中脚を初期設定
+        time.sleep(0.004)
+        self.driver2.to_angle(7, 5)  # 右中脚を初期設定
+        time.sleep(0.004)
+
+        time.sleep(0.1)
+
+    def on_backward(self):
+        print("後進")
+        # ----------------------------------------
+        # 1段階目
+        # ----------------------------------------
+        self.driver1.to_angle(2, leftup)  # 左脚高さ初期値
+        time.sleep(0.004)
+        self.driver1.to_angle(5, rightup)  # 右脚高さ初期値
+        time.sleep(0.004)
+        self.driver1.to_angle(8, leftup)  # 左脚高さ初期値
+        time.sleep(0.004)
+
+        self.driver2.to_angle(2, rightn)  # 左脚高さ初期値
+        time.sleep(0.004)
+        self.driver2.to_angle(5, leftn)  # 右脚高さ初期値
+        time.sleep(0.004)
+        self.driver2.to_angle(8, rightn)  # 左脚高さ初期値
+        time.sleep(0.004)
+
+        time.sleep(0.1)
+
+        # ---------------------------------
+        # 2段階目
+        # ---------------------------------
+        self.driver1.to_angle(0, 30)  # 右中脚を前に動かす
+        time.sleep(0.004)
+        self.driver1.to_angle(1, 5)  # 足の角度を前方向へ
+        time.sleep(0.004)
+        self.driver1.to_angle(3, -30)  # 右前脚を前に動かす
+        time.sleep(0.004)
+        self.driver1.to_angle(4, -5)  # 足の角度を前方向へ
+        time.sleep(0.004)
+        self.driver1.to_angle(6, 30)  # 右中脚を前に動かす
+        time.sleep(0.004)
+        self.driver1.to_angle(7, 5)  # 足の角度を前方向へ
+        time.sleep(0.004)
+
+        self.driver2.to_angle(0, 30)  # 右中脚を初期設定
+        time.sleep(0.004)
+        self.driver2.to_angle(1, 5)  # 右前脚を初期設定
+        time.sleep(0.004)
+        self.driver2.to_angle(3, -30)  # 右中脚を初期設定
+        time.sleep(0.004)
+        self.driver2.to_angle(4, -5)  # 右中脚を初期設定
+        time.sleep(0.004)
+        self.driver2.to_angle(6, 30)  # 右中脚を初期設定
+        time.sleep(0.004)
+        self.driver2.to_angle(7, 5)  # 右中脚を初期設定
+        time.sleep(0.004)
+
+        time.sleep(0.1)
+
+        # -------------------------------
+        # 3段階目
+        # -------------------------------
+        self.driver1.to_angle(2, leftn)  # 左脚高さ初期値
+        time.sleep(0.004)
+        self.driver1.to_angle(5, rightn)  # 右脚高さ初期値
+        time.sleep(0.004)
+        self.driver1.to_angle(8, leftn)  # 左脚高さ初期値
+        time.sleep(0.004)
+
+        self.driver2.to_angle(2, rightup)  # 左脚高さ初期値
+        time.sleep(0.004)
+        self.driver2.to_angle(5, leftup)  # 右脚高さ初期値
+        time.sleep(0.004)
+        self.driver2.to_angle(8, rightup)  # 左脚高さ初期値
+        time.sleep(0.004)
+
+        time.sleep(0.1)
+
+        # ------------------------------------
+        # 4段階目
+        # ------------------------------------
+        self.driver1.to_angle(0, -30)  # 右中脚を前に動かす
+        time.sleep(0.004)
+        self.driver1.to_angle(1, -5)  # 足の角度を前方向へ
+        time.sleep(0.004)
+        self.driver1.to_angle(3, 30)  # 右前脚を前に動かす
+        time.sleep(0.004)
+        self.driver1.to_angle(4, 5)  # 足の角度を前方向へ
+        time.sleep(0.004)
+        self.driver1.to_angle(6, -30)  # 右中脚を前に動かす
+        time.sleep(0.004)
+        self.driver1.to_angle(7, -5)  # 足の角度を前方向へ
+        time.sleep(0.004)
+
+        self.driver2.to_angle(0, -30)  # 右中脚を初期設定
+        time.sleep(0.004)
+        self.driver2.to_angle(1, -5)  # 右前脚を初期設定
+        time.sleep(0.004)
+        self.driver2.to_angle(3, 30)  # 右中脚を初期設定
+        time.sleep(0.004)
+        self.driver2.to_angle(4, 5)  # 右中脚を初期設定
+        time.sleep(0.004)
+        self.driver2.to_angle(6, -30)  # 右中脚を初期設定
+        time.sleep(0.004)
+        self.driver2.to_angle(7, -5)  # 右中脚を初期設定
+        time.sleep(0.004)
+
+        time.sleep(0.1)
+
+    def on_left_turn(self):
+        print("左旋回")
+        # ----------------------------------------
+        # 1段階目
+        # ----------------------------------------
+        self.driver1.to_angle(2, left_t_up)  # 左脚高さ初期値
+        time.sleep(0.004)
+        self.driver1.to_angle(5, right_t_up)  # 右脚高さ初期値
+        time.sleep(0.004)
+        self.driver1.to_angle(8, left_t_up)  # 左脚高さ初期値
+        time.sleep(0.004)
+
+        self.driver2.to_angle(2, rightn)  # 左脚高さ初期値
+        time.sleep(0.004)
+        self.driver2.to_angle(5, leftn)  # 右脚高さ初期値
+        time.sleep(0.004)
+        self.driver2.to_angle(8, rightn)  # 左脚高さ初期値
+        time.sleep(0.004)
+
+        time.sleep(0.1)
+
+        # ---------------------------------
+        # 2段階目
+        # ---------------------------------
+        self.driver1.to_angle(0, 30)  # 右中脚を前に動かす
+        time.sleep(0.004)
+        self.driver1.to_angle(1, 5)  # 足の角度を前方向へ
+        time.sleep(0.004)
+        self.driver1.to_angle(3, 30)  # 右前脚を前に動かす
+        time.sleep(0.004)
+        self.driver1.to_angle(4, 5)  # 足の角度を前方向へ
+        time.sleep(0.004)
+        self.driver1.to_angle(6, 30)  # 右中脚を前に動かす
+        time.sleep(0.004)
+        self.driver1.to_angle(7, 5)  # 足の角度を前方向へ
+        time.sleep(0.004)
+
+        self.driver2.to_angle(0, 30)  # 右中脚を初期設定
+        time.sleep(0.004)
+        self.driver2.to_angle(1, 5)  # 右前脚を初期設定
+        time.sleep(0.004)
+        self.driver2.to_angle(3, 30)  # 右中脚を初期設定
+        time.sleep(0.004)
+        self.driver2.to_angle(4, 5)  # 右中脚を初期設定
+        time.sleep(0.004)
+        self.driver2.to_angle(6, 30)  # 右中脚を初期設定
+        time.sleep(0.004)
+        self.driver2.to_angle(7, 5)  # 右中脚を初期設定
+        time.sleep(0.004)
+
+        time.sleep(0.1)
+
+        # -------------------------------
+        # 3段階目
+        # -------------------------------
+        self.driver1.to_angle(2, leftn)  # 左脚高さ初期値
+        time.sleep(0.004)
+        self.driver1.to_angle(5, rightn)  # 右脚高さ初期値
+        time.sleep(0.004)
+        self.driver1.to_angle(8, leftn)  # 左脚高さ初期値
+        time.sleep(0.004)
+
+        self.driver1.to_angle(2, right_t_up)  # 左脚高さ初期値
+        time.sleep(0.004)
+        self.driver1.to_angle(5, left_t_up)  # 右脚高さ初期値
+        time.sleep(0.004)
+        self.driver1.to_angle(8, right_t_up)  # 左脚高さ初期値
+        time.sleep(0.004)
+
+        time.sleep(0.1)
+
+        # ------------------------------------
+        # 4段階目
+        # ------------------------------------
+        self.driver1.to_angle(0, -30)  # 右中脚を前に動かす
+        time.sleep(0.004)
+        self.driver1.to_angle(1, -5)  # 足の角度を前方向へ
+        time.sleep(0.004)
+        self.driver1.to_angle(3, -30)  # 右前脚を前に動かす
+        time.sleep(0.004)
+        self.driver1.to_angle(4, -5)  # 足の角度を前方向へ
+        time.sleep(0.004)
+        self.driver1.to_angle(6, -30)  # 右中脚を前に動かす
+        time.sleep(0.004)
+        self.driver1.to_angle(7, -5)  # 足の角度を前方向へ
+        time.sleep(0.004)
+
+        self.driver2.to_angle(0, -30)  # 右中脚を初期設定
+        time.sleep(0.004)
+        self.driver2.to_angle(1, -5)  # 右前脚を初期設定
+        time.sleep(0.004)
+        self.driver2.to_angle(3, -30)  # 右中脚を初期設定
+        time.sleep(0.004)
+        self.driver2.to_angle(4, -5)  # 右中脚を初期設定
+        time.sleep(0.004)
+        self.driver2.to_angle(6, -30)  # 右中脚を初期設定
+        time.sleep(0.004)
+        self.driver2.to_angle(7, -5)  # 右中脚を初期設定
+        time.sleep(0.004)
+
+        time.sleep(0.1)
+
+    def on_right_turn(self):
+        print("右旋回")
+        # ----------------------------------------
+        # 1段階目
+        # ----------------------------------------
+        self.driver1.to_angle(2, left_t_up)  # 左脚高さ初期値
+        time.sleep(0.004)
+        self.driver1.to_angle(5, right_t_up)  # 右脚高さ初期値
+        time.sleep(0.004)
+        self.driver1.to_angle(8, left_t_up)  # 左脚高さ初期値
+        time.sleep(0.004)
+
+        self.driver2.to_angle(2, rightn)  # 左脚高さ初期値
+        time.sleep(0.004)
+        self.driver2.to_angle(5, leftn)  # 右脚高さ初期値
+        time.sleep(0.004)
+        self.driver2.to_angle(8, rightn)  # 左脚高さ初期値
+        time.sleep(0.004)
+
+        time.sleep(0.1)
+
+        # ------------------------------------
+        # 2段階目
+        # ------------------------------------
+        self.driver1.to_angle(0, -30)  # 右中脚を前に動かす
+        time.sleep(0.004)
+        self.driver1.to_angle(1, -5)  # 足の角度を前方向へ
+        time.sleep(0.004)
+        self.driver1.to_angle(3, -30)  # 右前脚を前に動かす
+        time.sleep(0.004)
+        self.driver1.to_angle(4, -5)  # 足の角度を前方向へ
+        time.sleep(0.004)
+        self.driver1.to_angle(6, -30)  # 右中脚を前に動かす
+        time.sleep(0.004)
+        self.driver1.to_angle(7, -5)  # 足の角度を前方向へ
+        time.sleep(0.004)
+
+        self.driver2.to_angle(0, -30)  # 右中脚を初期設定
+        time.sleep(0.004)
+        self.driver2.to_angle(1, -5)  # 右前脚を初期設定
+        time.sleep(0.004)
+        self.driver2.to_angle(3, -30)  # 右中脚を初期設定
+        time.sleep(0.004)
+        self.driver2.to_angle(4, -5)  # 右中脚を初期設定
+        time.sleep(0.004)
+        self.driver2.to_angle(6, -30)  # 右中脚を初期設定
+        time.sleep(0.004)
+        self.driver2.to_angle(7, -5)  # 右中脚を初期設定
+        time.sleep(0.004)
+
+        time.sleep(0.1)
+
+        # -------------------------------
+        # 3段階目
+        # -------------------------------
+        self.driver1.to_angle(2, leftn)  # 左脚高さ初期値
+        time.sleep(0.004)
+        self.driver1.to_angle(5, rightn)  # 右脚高さ初期値
+        time.sleep(0.004)
+        self.driver1.to_angle(8, leftn)  # 左脚高さ初期値
+        time.sleep(0.004)
+
+        self.driver2.to_angle(2, right_t_up)  # 左脚高さ初期値
+        time.sleep(0.004)
+        self.driver2.to_angle(5, left_t_up)  # 右脚高さ初期値
+        time.sleep(0.004)
+        self.driver2.to_angle(8, right_t_up)  # 左脚高さ初期値
+        time.sleep(0.004)
+
+        time.sleep(0.1)
+
+        # ---------------------------------
+        # 2段階目
+        # ---------------------------------
+        self.driver1.to_angle(0, 30)  # 右中脚を前に動かす
+        time.sleep(0.004)
+        self.driver1.to_angle(1, 5)  # 足の角度を前方向へ
+        time.sleep(0.004)
+        self.driver1.to_angle(3, 30)  # 右前脚を前に動かす
+        time.sleep(0.004)
+        self.driver1.to_angle(4, 5)  # 足の角度を前方向へ
+        time.sleep(0.004)
+        self.driver1.to_angle(6, 30)  # 右中脚を前に動かす
+        time.sleep(0.004)
+        self.driver1.to_angle(7, 5)  # 足の角度を前方向へ
+        time.sleep(0.004)
+
+        self.driver2.to_angle(0, 30)  # 右中脚を初期設定
+        time.sleep(0.004)
+        self.driver2.to_angle(1, 5)  # 右前脚を初期設定
+        time.sleep(0.004)
+        self.driver2.to_angle(3, 30)  # 右中脚を初期設定
+        time.sleep(0.004)
+        self.driver2.to_angle(4, 5)  # 右中脚を初期設定
+        time.sleep(0.004)
+        self.driver2.to_angle(6, 30)  # 右中脚を初期設定
+        time.sleep(0.004)
+        self.driver2.to_angle(7, 5)  # 右中脚を初期設定
+        time.sleep(0.004)
+
+        time.sleep(0.1)
+
+    def on_stop(self):
+        print('ストップ')
+
+    def on_neutral(self):
+        print('ニュートラルポジション')
+        self.driver1.to_angle(2, leftn)  # 左脚高さ初期値
+        time.sleep(0.004)
+        self.driver1.to_angle(5, rightn)  # 右脚高さ初期値
+        time.sleep(0.004)
+        self.driver1.to_angle(8, leftn)  # 左脚高さ初期値
+        time.sleep(0.004)
+
+        self.driver1.to_angle(0, 0)  # 右中脚を前に動かす
+        time.sleep(0.004)
+        self.driver1.to_angle(1, 0)  # 右前脚を前に動かす
+        time.sleep(0.004)
+        self.driver1.to_angle(3, 0)  # 右中脚を前に動かす
+        time.sleep(0.004)
+        self.driver1.to_angle(4, 0)  # 右中脚を前に動かす
+        time.sleep(0.004)
+        self.driver1.to_angle(6, 0)  # 右前脚を前に動かす
+        time.sleep(0.004)
+        self.driver1.to_angle(7, 0)  # 右中脚を前に動かす
+        time.sleep(0.004)
+
+        self.driver2.to_angle(2, rightn)  # 左脚高さ初期値
+        time.sleep(0.004)
+        self.driver2.to_angle(5, leftn)  # 右脚高さ初期値sudo
+        time.sleep(0.004)
+        self.driver2.to_angle(8, rightn)  # 左脚高さ初期値
+        time.sleep(0.004)
+
+        self.driver2.to_angle(0, 0)  # 右中脚を前に動かす
+        time.sleep(0.004)
+        self.driver2.to_angle(1, 0)  # 右前脚を前に動かす
+        time.sleep(0.004)
+        self.driver2.to_angle(3, 0)  # 右中脚を前に動かす
+        time.sleep(0.004)
+        self.driver2.to_angle(4, 0)  # 右中脚を前に動かす
+        time.sleep(0.004)
+        self.driver2.to_angle(6, 0)  # 右前脚を前に動かす
+        time.sleep(0.004)
+        self.driver2.to_angle(7, 0)  # 右中脚を前に動かす
+        time.sleep(0.004)
+
+        time.sleep(0.1)
+'''
