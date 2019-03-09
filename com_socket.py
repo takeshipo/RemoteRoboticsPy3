@@ -27,7 +27,7 @@ class SupportSocketServer:
             except IOError:
                 print('受信でエラー発生！通信を終了します。')
                 self.client_socket.close()
-                self.socket.close()
+                self.close()
 
         self.recv_func = recv_func
 
@@ -39,7 +39,7 @@ class SupportSocketServer:
             except IOError:
                 print('送信でエラー発生！通信を終了します。')
                 self.client_socket.close()
-                self.socket.close()
+                self.close()
 
         self.send_func = s_func
 
@@ -83,7 +83,7 @@ class SupportSocketClient:
 
             except IOError:
                 print('受信でエラー発生！通信を終了します。')
-                self.socket.close()
+                self.close()
 
         self.recv_func = r_func
 
@@ -93,7 +93,7 @@ class SupportSocketClient:
 
             except IOError:
                 print('送信でエラー発生！通信を終了します。')
-                socket()
+                self.close()
 
         self.send_func = s_func
 

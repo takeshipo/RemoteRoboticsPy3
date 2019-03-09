@@ -2,34 +2,35 @@
 from enum import IntEnum
 from servo import *
 import time
+from robotics import Robotics
 
-class State(IntEnum):
-    ON_NEWTRAL = 199
-    ON_FORWARD = 200
-    ON_BACKWARD = 201
-    ON_RIGHT_TURN = 202
-    ON_LEFT_TURN = 203
-    ON_STOP = 204
+# 角度変数
+# 左足の動作
+leftn = -30  # 左足の高さ初期値
+leftup = 40  # 左脚の上げる高さ
+left_t_up = 80
+# 右足の動作
+rightn = -30  # 右脚高さの初期値
+rightup = 40  # 右脚の上げる高さ
+right_t_up = 80
 
 
 class Arm2axis:
-    def __init__(self, pitch, roll):
+    def __init__(self, yaw, pitch):
+        self.yaw_type = yaw["config_data"]
+        self.yaw_channel = yaw["channel"]
+        self.yaw_driver = yaw["driver"]
+
         self.pitch_type = pitch["config_data"]
         self.pitch_channel = pitch["channel"]
         self.pitch_driver = pitch["driver"]
 
-        self.roll_type = roll["config_data"]
-        self.roll_channel = roll["channel"]
-        self.roll_driver = roll["driver"]
-
-    
-
-    def set_pitch_angle(self, angle):
-        self.set_pitch_angle(self.pitch_type, self.pitch_channel, angle)
+    def set_yaw_angle(self, angle):
+        self.yaw_driver.to_angle(self.yaw_type, self.yaw_channel, angle)
         return self
 
-    def set_roll_angle(self, angle):
-        self.set_roll_angle(self.roll_type, self.roll_channel, angle)
+    def set_pitch_angle(self, angle):
+        self.pitch_driver.to_angle(self.pitch_type, self.pitch_channel, angle)
         return self
 
 
@@ -41,29 +42,28 @@ class Hexapod2axis(Robotics):
 
         self.arm1 = Arm2axis(
             pitch={"channel": 0, "driver": self.driver, "config_data": get_MG92B()},
-            roll={"channel": 2, "driver": self.driver, "config_data": get_MG92B()})
+            yaw={"channel": 2, "driver": self.driver, "config_data": get_MG92B()})
 
         self.arm2 = Arm2axis(
             pitch={"channel": 2, "driver": self.driver, "config_data": get_MG92B()},
-            roll={"channel": 2, "driver": self.driver, "config_data": get_MG92B()})
+            yaw={"channel": 2, "driver": self.driver, "config_data": get_MG92B()})
 
         self.arm3 = Arm2axis(
             pitch={"channel": 2, "driver": self.driver, "config_data": get_MG92B()},
-            roll={"channel": 2, "driver": self.driver, "config_data": get_MG92B()})
+            yaw={"channel": 2, "driver": self.driver, "config_data": get_MG92B()})
 
         self.arm4 = Arm2axis(
             pitch={"channel": 2, "driver": self.driver, "config_data": get_MG92B()},
-            roll={"channel": 2, "driver": self.driver, "config_data": get_MG92B()})
+            yaw={"channel": 2, "driver": self.driver, "config_data": get_MG92B()})
 
         self.arm5 = Arm2axis(
             pitch={"channel": 2, "driver": self.driver, "config_data": get_MG92B()},
-            roll={"channel": 2, "driver": self.driver, "config_data": get_MG92B()})
+            yaw={"channel": 2, "driver": self.driver, "config_data": get_MG92B()})
 
         self.arm6 = Arm2axis(
             pitch={"channel": 2, "driver": self.driver, "config_data": get_MG92B()},
-            roll={"channel": 2, "driver": self.driver, "config_data": get_MG92B()})
+            yaw={"channel": 2, "driver": self.driver, "config_data": get_MG92B()})
 
-  
     def on_forward(self):
         print("前進")
 
@@ -80,16 +80,16 @@ class Hexapod2axis(Robotics):
 
         time.sleep(0.1)
 
-        #--------------------------------------
+        # --------------------------------------
         # 2段階動作
         # --------------------------------------
-        self.arm1.set_roll_angle(45)
-        self.arm4.set_roll_angle(-45)
-        self.arm5.set_roll_angle(45)
+        self.arm1.set_yaw_angle(45)
+        self.arm4.set_yaw_angle(-45)
+        self.arm5.set_yaw_angle(45)
 
-        self.arm2.set_roll_angle(-45)
-        self.arm3.set_roll_angle(45)
-        self.arm6.set_roll_angle(-45)
+        self.arm2.set_yaw_angle(-45)
+        self.arm3.set_yaw_angle(45)
+        self.arm6.set_yaw_angle(-45)
 
         time.sleep(0.1)
 
@@ -106,24 +106,22 @@ class Hexapod2axis(Robotics):
 
         time.sleep(0.1)
 
-
         # --------------------------------------
         # 4段階動作
         # --------------------------------------
-        self.arm1.set_roll_angle(-45)
-        self.arm4.set_roll_angle(45)
-        self.arm5.set_roll_angle(-45)
+        self.arm1.set_yaw_angle(-45)
+        self.arm4.set_yaw_angle(45)
+        self.arm5.set_yaw_angle(-45)
 
-        self.arm2.set_roll_angle(45)
-        self.arm3.set_roll_angle(-45)
-        self.arm6.set_roll_angle(45)
+        self.arm2.set_yaw_angle(45)
+        self.arm3.set_yaw_angle(-45)
+        self.arm6.set_yaw_angle(45)
 
         time.sleep(0.1)
 
-
     def on_backward(self):
         print("後進")
-        
+
         # ---------------------------------------
         # 1段階動作
         # ---------------------------------------
@@ -137,16 +135,16 @@ class Hexapod2axis(Robotics):
 
         time.sleep(0.1)
 
-        #--------------------------------------
+        # --------------------------------------
         # 2段階動作
         # --------------------------------------
-        self.arm1.set_roll_angle(45)
-        self.arm4.set_roll_angle(-45)
-        self.arm5.set_roll_angle(45)
+        self.arm1.set_yaw_angle(45)
+        self.arm4.set_yaw_angle(-45)
+        self.arm5.set_yaw_angle(45)
 
-        self.arm2.set_roll_angle(-45)
-        self.arm3.set_roll_angle(45)
-        self.arm6.set_roll_angle(-45)
+        self.arm2.set_yaw_angle(-45)
+        self.arm3.set_yaw_angle(45)
+        self.arm6.set_yaw_angle(-45)
 
         time.sleep(0.1)
 
@@ -166,13 +164,13 @@ class Hexapod2axis(Robotics):
         # --------------------------------------
         # 4段階動作
         # --------------------------------------
-        self.arm1.set_roll_angle(-45)
-        self.arm4.set_roll_angle(45)
-        self.arm5.set_roll_angle(-45)
+        self.arm1.set_yaw_angle(-45)
+        self.arm4.set_yaw_angle(45)
+        self.arm5.set_yaw_angle(-45)
 
-        self.arm2.set_roll_angle(45)
-        self.arm3.set_roll_angle(-45)
-        self.arm6.set_roll_angle(45)
+        self.arm2.set_yaw_angle(45)
+        self.arm3.set_yaw_angle(-45)
+        self.arm6.set_yaw_angle(45)
 
         time.sleep(0.1)
 
@@ -191,19 +189,19 @@ class Hexapod2axis(Robotics):
 
         time.sleep(0.1)
 
-        #--------------------------------------
+        # --------------------------------------
         # 2段階動作
         # --------------------------------------
-        self.arm1.set_roll_angle(45)
-        self.arm4.set_roll_angle(45)
-        self.arm5.set_roll_angle(45)
+        self.arm1.set_yaw_angle(45)
+        self.arm4.set_yaw_angle(45)
+        self.arm5.set_yaw_angle(45)
 
-        self.arm2.set_roll_angle(-45)
-        self.arm3.set_roll_angle(-45)
-        self.arm6.set_roll_angle(-45)
+        self.arm2.set_yaw_angle(-45)
+        self.arm3.set_yaw_angle(-45)
+        self.arm6.set_yaw_angle(-45)
 
         time.sleep(0.1)
-        
+
         # ---------------------------------------
         # 3段階動作
         # ---------------------------------------
@@ -217,21 +215,21 @@ class Hexapod2axis(Robotics):
 
         time.sleep(0.1)
 
-        #--------------------------------------
+        # --------------------------------------
         # 4段階動作
         # --------------------------------------
-        self.arm1.set_roll_angle(-45)
-        self.arm4.set_roll_angle(-45)
-        self.arm5.set_roll_angle(-45)
+        self.arm1.set_yaw_angle(-45)
+        self.arm4.set_yaw_angle(-45)
+        self.arm5.set_yaw_angle(-45)
 
-        self.arm2.set_roll_angle(45)
-        self.arm3.set_roll_angle(45)
-        self.arm6.set_roll_angle(45)
+        self.arm2.set_yaw_angle(45)
+        self.arm3.set_yaw_angle(45)
+        self.arm6.set_yaw_angle(45)
 
         time.sleep(0.1)
 
-    def on_left_turn(self):
-        print("左旋回")
+    def on_right_turn(self):
+        print("右旋回")
         # ---------------------------------------
         # 1段階動作
         # ---------------------------------------
@@ -245,19 +243,19 @@ class Hexapod2axis(Robotics):
 
         time.sleep(0.1)
 
-        #--------------------------------------
+        # --------------------------------------
         # 2段階動作
         # --------------------------------------
-        self.arm1.set_roll_angle(-45)
-        self.arm4.set_roll_angle(-45)
-        self.arm5.set_roll_angle(-45)
+        self.arm1.set_yaw_angle(-45)
+        self.arm4.set_yaw_angle(-45)
+        self.arm5.set_yaw_angle(-45)
 
-        self.arm2.set_roll_angle(45)
-        self.arm3.set_roll_angle(45)
-        self.arm6.set_roll_angle(45)
+        self.arm2.set_yaw_angle(45)
+        self.arm3.set_yaw_angle(45)
+        self.arm6.set_yaw_angle(45)
 
         time.sleep(0.1)
-        
+
         # ---------------------------------------
         # 3段階動作
         # ---------------------------------------
@@ -271,21 +269,22 @@ class Hexapod2axis(Robotics):
 
         time.sleep(0.1)
 
-        #--------------------------------------
+        # --------------------------------------
         # 4段階動作
         # --------------------------------------
-        self.arm1.set_roll_angle(45)
-        self.arm4.set_roll_angle(45)
-        self.arm5.set_roll_angle(45)
+        self.arm1.set_yaw_angle(45)
+        self.arm4.set_yaw_angle(45)
+        self.arm5.set_yaw_angle(45)
 
-        self.arm2.set_roll_angle(-45)
-        self.arm3.set_roll_angle(-45)
-        self.arm6.set_roll_angle(-45)
+        self.arm2.set_yaw_angle(-45)
+        self.arm3.set_yaw_angle(-45)
+        self.arm6.set_yaw_angle(-45)
 
         time.sleep(0.1)
 
     def on_stop(self):
         print('ストップ')
+
     def on_neutral(self):
         print('ニュートラルポジション')
         # ---------------------------------------
@@ -299,12 +298,12 @@ class Hexapod2axis(Robotics):
         self.arm3.set_pitch_angle(-30)
         self.arm6.set_pitch_angle(-30)
 
-        self.arm1.set_roll_angle(0)
-        self.arm4.set_roll_angle(0)
-        self.arm5.set_roll_angle(0)
+        self.arm1.set_yaw_angle(0)
+        self.arm4.set_yaw_angle(0)
+        self.arm5.set_yaw_angle(0)
 
-        self.arm2.set_roll_angle(0)
-        self.arm3.set_roll_angle(0)
-        self.arm6.set_roll_angle(0)
+        self.arm2.set_yaw_angle(0)
+        self.arm3.set_yaw_angle(0)
+        self.arm6.set_yaw_angle(0)
 
         time.sleep(0.1)
