@@ -3,8 +3,9 @@ from __future__ import division
 
 import concurrent.futures
 import dataclasses
-
+from time import sleep
 import Adafruit_PCA9685
+import math
 
 
 # サーボのPWM値のデータクラス
@@ -36,6 +37,7 @@ def get_SG92R():
 
 def get_MG92B():
     # FIXME: データシートが見つからないので正しい値が不明。要検証。
+
     return ServoPwmConfigData(20000, 365, 2000, 700)
 
 
@@ -62,6 +64,25 @@ class SupportServoDriver(object):
     def to_angle(self, channel, angle):
         pulse_value = self.calc_pulse(angle)
         self.executor.submit(fn=self.pwm.set_pwm(channel, 0, pulse_value))
+
+    def to_angle(self, channel, angle, adj, max, min, speed, now, servo_min, servo_max):
+        dst = (servo_min - servo_max)*(angle+adj+90)/180 + servo_max
+        if speed == 0:
+            self.pwm.set_pwm(channel, 0, dst)
+            sleep(0.001 * math.fabs(dst-now))
+            now = dst
+        if dst > max: dst = max
+        if dst < min: dst = min
+        while (dst != now):
+            if now < dst:
+                now += self.steps
+                if now > dst: now = dst
+            else:
+                now -= self.steps
+                if now < dst: now = dst
+            self.pwm.set_pwm(channel, 0, now)
+            sleep(0.004 * self.steps *(speed))
+        return (now)
 
     # 角度を受け取ってPCA9685に対応した値を算出する
     def calc_pulse(self, angle):
