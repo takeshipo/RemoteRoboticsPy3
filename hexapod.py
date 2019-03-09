@@ -179,54 +179,6 @@ class Hexapod2axis(Robotics):
         # ---------------------------------------
         # 1段階動作
         # ---------------------------------------
-        self.arm1.set_pitch_angle(-30)
-        self.arm4.set_pitch_angle(-30)
-        self.arm5.set_pitch_angle(-30)
-
-        self.arm2.set_pitch_angle(40)
-        self.arm3.set_pitch_angle(40)
-        self.arm6.set_pitch_angle(40)
-
-        time.sleep(0.1)
-
-        # --------------------------------------
-        # 2段階動作
-        # --------------------------------------
-        self.arm1.set_yaw_angle(45)
-        self.arm4.set_yaw_angle(45)
-        self.arm5.set_yaw_angle(45)
-
-        self.arm2.set_yaw_angle(-45)
-        self.arm3.set_yaw_angle(-45)
-        self.arm6.set_yaw_angle(-45)
-
-        time.sleep(0.1)
-
-        # ---------------------------------------
-        # 3段階動作
-        # ---------------------------------------
-        self.arm1.set_pitch_angle(-30)
-        self.arm4.set_pitch_angle(-30)
-        self.arm5.set_pitch_angle(-30)
-
-        self.arm2.set_pitch_angle(40)
-        self.arm3.set_pitch_angle(40)
-        self.arm6.set_pitch_angle(40)
-
-        time.sleep(0.1)
-
-        # --------------------------------------
-        # 4段階動作
-        # --------------------------------------
-        self.arm1.set_yaw_angle(-45)
-        self.arm4.set_yaw_angle(-45)
-        self.arm5.set_yaw_angle(-45)
-
-        self.arm2.set_yaw_angle(45)
-        self.arm3.set_yaw_angle(45)
-        self.arm6.set_yaw_angle(45)
-
-        time.sleep(0.1)
 
     def on_right_turn(self):
         print("右旋回")
@@ -279,6 +231,54 @@ class Hexapod2axis(Robotics):
         self.arm2.set_yaw_angle(-45)
         self.arm3.set_yaw_angle(-45)
         self.arm6.set_yaw_angle(-45)
+
+        time.sleep(0.1)
+        self.arm1.set_pitch_angle(-30)
+        self.arm4.set_pitch_angle(-30)
+        self.arm5.set_pitch_angle(-30)
+
+        self.arm2.set_pitch_angle(40)
+        self.arm3.set_pitch_angle(40)
+        self.arm6.set_pitch_angle(40)
+
+        time.sleep(0.1)
+
+        # --------------------------------------
+        # 2段階動作
+        # --------------------------------------
+        self.arm1.set_yaw_angle(45)
+        self.arm4.set_yaw_angle(45)
+        self.arm5.set_yaw_angle(45)
+
+        self.arm2.set_yaw_angle(-45)
+        self.arm3.set_yaw_angle(-45)
+        self.arm6.set_yaw_angle(-45)
+
+        time.sleep(0.1)
+
+        # ---------------------------------------
+        # 3段階動作
+        # ---------------------------------------
+        self.arm1.set_pitch_angle(-30)
+        self.arm4.set_pitch_angle(-30)
+        self.arm5.set_pitch_angle(-30)
+
+        self.arm2.set_pitch_angle(40)
+        self.arm3.set_pitch_angle(40)
+        self.arm6.set_pitch_angle(40)
+
+        time.sleep(0.1)
+
+        # --------------------------------------
+        # 4段階動作
+        # --------------------------------------
+        self.arm1.set_yaw_angle(-45)
+        self.arm4.set_yaw_angle(-45)
+        self.arm5.set_yaw_angle(-45)
+
+        self.arm2.set_yaw_angle(45)
+        self.arm3.set_yaw_angle(45)
+        self.arm6.set_yaw_angle(45)
 
         time.sleep(0.1)
 
