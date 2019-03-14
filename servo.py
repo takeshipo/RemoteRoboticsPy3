@@ -37,7 +37,6 @@ def get_SG92R():
 
 def get_MG92B():
     # FIXME: データシートが見つからないので正しい値が不明。要検証。
-
     return ServoPwmConfigData(20000, 365, 2000, 700)
 
 
@@ -63,26 +62,39 @@ class SupportServoDriver(object):
     def to_angle(self, config_data, channel, angle):
         pulse_value = self.calc_pulse(angle, config_data)
         self.executor.submit(fn=self.pwm.set_pwm(channel, 0, pulse_value))
-
-    def to_angle(self, channel, angle, adj, max, min, speed, now, servo_min, servo_max):
-        dst = (servo_min - servo_max)*(angle+adj+90)/180 + servo_max
-        if speed == 0:
-            self.pwm.set_pwm(channel, 0, dst)
-            sleep(0.001 * math.fabs(dst-now))
-            now = dst
-        if dst > max: dst = max
-        if dst < min: dst = min
-        while (dst != now):
-            if now < dst:
-                now += self.steps
-                if now > dst: now = dst
-            else:
-                now -= self.steps
-                if now < dst: now = dst
-            self.pwm.set_pwm(channel, 0, now)
-            sleep(0.004 * self.steps *(speed))
-        return (now)
-
+    #
+    # def to_angle(self, config_data, channel, angle, speed):
+    #     now = 0  # 現在の角度を記憶
+    #     steps = 0.8  # 変化量
+    #
+    #     dst = self.calc_pulse(angle, config_data)
+    #
+    #     if speed == 0:
+    #         self.pwm.set_pwm(channel, 0, int(dst))
+    #         sleep(0.001 * math.fabs(dst - now))
+    #         now = dst
+    #
+    #     # dstがサーボの最大角を超えている場合
+    #     if dst > config_data.servo_max:
+    #         dst = config_data.servo_max
+    #
+    #     # dstがサーボの最小角を超えている場合
+    #     elif dst < config_data.servo_min:
+    #         dst = config_data.servo_min
+    #
+    #     while dst != now:
+    #         if now < dst:
+    #             now += steps
+    #             if now > dst:
+    #                 now = dst
+    #         else:
+    #             now -= steps
+    #             if now < dst:
+    #                 now = dst
+    #
+    #         self.pwm.set_pwm(channel, 0, int(now))
+    #         sleep(0.004 * int(steps) * speed)
+    #
     # 角度を受け取ってPCA9685に対応した値を算出する
     def calc_pulse(self, angle, config_data):
         # パルス幅よりDuty比を求める。
